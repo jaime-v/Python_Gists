@@ -1,13 +1,6 @@
 # Project Title
 
----
-
-## README Template
-> https://gist.github.com/DomPizzie/7a5ff55ffa9081f2de27c315f5018afc
-
----
-
-Simple overview of use/purpose.
+Python Project that is essentially a small version of GitHub Gists
 
 ## Description
 
@@ -17,8 +10,11 @@ An in-depth paragraph about your project and overview of use.
 
 ### Dependencies
 
-* Describe any prerequisites, libraries, OS version, etc., needed before installing program.
-* ex. Windows 10
+* Docker
+* Python 3.14
+* FastAPI
+* Node v25.7.0
+* NPM 11.10.1
 
 ### Installing
 
@@ -43,7 +39,6 @@ command to run if program contains helper info
 ## Authors
 
 Contributors names and contact info
-
 ex. Dominique Pizzie  
 ex. [@DomPizzie](https://twitter.com/dompizzie)
 
@@ -67,3 +62,8 @@ Inspiration, code snippets, etc.
 * [dbader](https://github.com/dbader/readme-template)
 * [zenorocha](https://gist.github.com/zenorocha/4526327)
 * [fvcproductions](https://gist.github.com/fvcproductions/1bfc2d4aecb01a834b46)
+
+---
+## README Template
+> https://gist.github.com/DomPizzie/7a5ff55ffa9081f2de27c315f5018afc
+---

@@ -3,9 +3,9 @@
 Used for things that I'm doing, things that I should know, and things I will
 hopefully memorize in the future
 
-References:
-Traversy Media FastAPI crash course
-Devsheets.io/sheets/fastapi
+References:  
+Traversy Media FastAPI crash course  
+Devsheets.io/sheets/fastapi  
 
 ## Setup
 

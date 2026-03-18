@@ -25,6 +25,14 @@ Create requirements.txt file
 `uvicorn main:app --reload`
 Then go to localhost:8000 and/or localhost:8000/docs
 
+### Git
+If many files are being tracked that we don't want to be tracked, run this:
+```
+git rm -r --cached .
+git add .
+git commit -m "message"
+```
+
 ### Misc
 
 URLs are like:

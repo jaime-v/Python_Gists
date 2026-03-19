@@ -33,6 +33,13 @@ git add .
 git commit -m "message"
 ```
 
+### Database (SQL)
+Suggested by FastAPI Docs
+`pip install sqlmodel`
+
+Can also do this for postgres
+`pip install sqlalchemy psycopg2-binary`
+
 ### Misc
 
 URLs are like:

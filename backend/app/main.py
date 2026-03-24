@@ -1,69 +1,18 @@
+# main.py
 from fastapi import FastAPI, status, Depends, HTTPException, Query
 from fastapi.security import OAuth2PasswordBearer
 from fastapi.middleware.cors import CORSMiddleware
-from typing import Optional, Annotated
-from pydantic import BaseModel
+from typing import Optional
+from passlib.context import CryptContext
 
+# import other files
+from backend.app.schemas import ItemIn, ItemOut, UserIn, UserOut
+from backend.app.db import get_db, User, Item
 # FastAPI Docs suggestion
 # from sqlmodel import Field, Session, SQLModel, create_engine, select
 
 # Devsheets suggestion
-from sqlalchemy import create_engine, Column, Integer, String, Boolean, Float, ForeignKey
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, Session, relationship
-
-class ItemIn(BaseModel):
-    name: str
-    price: float
-    is_offer: Optional[bool] = None
-    id: int
-
-class UserIn(BaseModel):
-    username: str
-    email: str
-    password: str
-
-class UserOut(BaseModel):
-    username: str
-    email: str
-
-items = []
-
-# Devsheets Suggestion
-DATABASE_URL = "sqlite.///./app.db"
-engine = create_engine(DATABASE_URL)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-Base = declarative_base()
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-class User(Base):
-    __tablename__ = "users"
-    id = Column(Integer, primary_key=True, index=True)
-    email = Column(String, unique=True, index=True)
-    username = Column(String, unique=True, index=True)
-    hashed_password = Column(String)
-    is_active = Column(Boolean, default=True)
-
-    items = relationship("Item", back_populates="owner")
-
-class Item(Base):
-    __tablename__ = "items"
-
-    id = Column(Integer, primary_key=True, index=True)
-    title = Column(String, index=True)
-    description = Column(String)
-    price = Column(Float)
-    owner_id = Column(Integer, ForeignKey("users.id"))
-
-    owner = relationship("User", back_populates="items")
-
-Base.metadata.create_all(bind=engine)
+from sqlalchemy.orm import Session
 
 # Docs Suggestion
 # class Hero(SQLModel, table=True):
@@ -104,21 +53,32 @@ app.add_middleware(
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
-async def common_params(q: str = "Supposedly None", skip: int = 0):
-    return{"q": q, "skip": skip}
+# Password hashing stuff
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
+def hash_password(password: str):
+    return pwd_context.hash(password)
+
+items = []
+
+"""
+---Bunch of testing patterns---
+-- Root
 @app.get("/")
 async def root():
     return {"message": "Hello World!"}
 
+-- Auth thing
 @app.get("/protected/")
 async def protected(token: str = Depends(oauth2_scheme)):
     return {"token": token}
 
+-- Get URL params
 @app.get("/users/{username}")
 async def get_user(username: str):
     return {"username": username}
 
+-- Post with specific response model
 @app.post("/users/", response_model=UserOut)
 async def create_user(user: UserIn, db: Session = Depends(get_db)):
     db_user = User(email=user.email)
@@ -127,6 +87,7 @@ async def create_user(user: UserIn, db: Session = Depends(get_db)):
     db.refresh(db_user)
     return user
 
+-- Query string
 @app.get("/search/")
 async def search(q: Optional[str] = None):
     return {"query": q}
@@ -134,19 +95,28 @@ async def search(q: Optional[str] = None):
 # @app.get("/items/")
 # async def get_items(skip: int = 0, limit: int = 10):
 #     return {"skip": skip, "limit": limit}
+# Limit can be used to limit the amount of information, can also use | None or
+# Optional[int] to make it optional
+
+-- Common params stuff
+async def common_params(q: str = "Supposedly None", skip: int = 0):
+    return{"q": q, "skip": skip}
 @app.get("/commons/")
 async def get_commons(commons: dict = Depends(common_params)):
     return commons
 
+-- Get items (in memory storage)
 @app.get("/items/")
 async def get_items():
     return items
 
+-- Create item
 @app.post("/items/", status_code=status.HTTP_201_CREATED)
 async def create_item(item: ItemIn):
     items.append(item)
     return item
 
+-- Get specific item
 @app.get("/items/{item_id}")
 async def get_item(item_id: int):
     print(type(items[0]))
@@ -155,7 +125,6 @@ async def get_item(item_id: int):
     if item is None:
         raise HTTPException(status_code=404, detail="Item not found")
     return item
-    """
     for item in items:
         if item_id == item.id:
             return item
@@ -166,17 +135,19 @@ async def get_item(item_id: int):
                 detail="Item not found"
                 )
     return items[item_id]
-    """
 
+-- Update item
 @app.put("/items/{item_id}")
 async def update_item(item_id: int, item: ItemIn):
     return {"item_id": item_id, "item": item.model_dump()}
 
+-- Delete item (doesn't actually delete though lol)
 @app.delete("/items/${item_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_item(item_id: int):
     print(item_id)
     return None
-
+"""
+# Some stuff from FastAPI docs
 # @app.post("/heroes/")
 # def create_hero(hero: Hero, session: SessionDep) -> Hero:
 #     session.add(hero)
@@ -204,8 +175,61 @@ async def delete_item(item_id: int):
 #     return heroes
 #
 
-@app.get("/db_user/")
-def get_db_user(db: Session, user_id: int):
+
+"""
+Actual stuff
+"""
+
+# Get user from database
+@app.get("/db_user/{user_id}/", response_model=UserOut)
+async def get_db_user(user_id: int, db: Session = Depends(get_db)):
+    # I think this is a query to the User table (class?) filters by user id and
+    # then gets the first row
+    # Then it returns that row?
     return db.query(User).filter(User.id == user_id).first()
 
-# Need to figure out how to use these
+# Get users from database
+@app.get("/db_user/")
+async def get_all_db_users(db: Session = Depends(get_db)):
+    # I think this is a query to the User table (class?) filters by user id and
+    # then gets the first row
+    # Then it returns that row?
+    return db.query(User).all()
+
+@app.post("/db_user/", response_model=UserOut)
+async def create_db_user(user: UserIn, db: Session = Depends(get_db)):
+    # UserIn has username, email, password
+    # hashed = hash_password(user.password)
+
+    # For now just send plain-text
+    hashed = user.password
+    db_user = User(
+            username=user.username,
+            email=user.email,
+            hashed_password=hashed
+            )
+    # Add and commit are like staging and committing changes
+    db.add(db_user)
+    db.commit()
+    # Refresh will get an up-to-date version of the object from database
+    db.refresh(db_user)
+    # Return it right after
+    return db_user
+
+@app.put("/db_user/{user_id}/", response_model=UserOut)
+async def update_db_user(user_id: int, updated_user: UserIn, db: Session = Depends(get_db)):
+    user_to_update = db.query(User).filter(User.id == user_id).first()
+    user_to_update = updated_user
+    db.commit()
+    db.refresh(user_to_update)
+    return user_to_update
+
+@app.delete("/db_user/{user_id}/", 
+            response_model=UserOut, 
+            status_code=status.HTTP_201_CREATED)
+async def delete_db_user(user_id: int, db: Session = Depends(get_db)):
+    user_to_delete = db.query(User).filter(User.id == user_id).first()
+    db.delete(user_to_delete)
+    db.commit()
+    return user_to_delete
+

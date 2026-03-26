@@ -1,6 +1,6 @@
 # test.py
 """
-Really just a bunch of stuff that I don't want to delete in case it might 
+Really just a bunch of stuff that I don't want to delete in case it might
 be useful later
 
 I swear I'm never going to use this
@@ -45,7 +45,6 @@ I swear I'm never going to use this
 # @app.on_event("startup")
 # def on_startup():
 #     create_db_and_tables()
-
 
 
 """
@@ -144,8 +143,8 @@ async def delete_item(item_id: int):
 #
 # @app.get("/heroes/")
 # def get_heroes(
-#         session: SessionDep, 
-#         offset: int = 0, 
+#         session: SessionDep,
+#         offset: int = 0,
 #         limit: Annotated[int, Query(le=100)] = 100,
 #         ):
 #     heroes = session.exec(select(Hero).offset(offset).limit(limit)).all()
@@ -154,12 +153,10 @@ async def delete_item(item_id: int):
 # list[Hero] not usable? Says Sequence[Hero]
 # @app.get("/heroes/")
 # def get_heroes(
-#         session: SessionDep, 
-#         offset: int = 0, 
+#         session: SessionDep,
+#         offset: int = 0,
 #         limit: Annotated[int, Query(le=100)] = 100,
 #         ) -> list[Hero]:
 #     heroes = session.exec(select(Hero).offset(offset).limit(limit)).all()
 #     return heroes
 #
-
-

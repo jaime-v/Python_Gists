@@ -15,9 +15,8 @@ load_dotenv()
 
 # Good practice to add a fallback database, but I don't have that currently
 DATABASE_URL = os.getenv(
-        "DATABASE_URL",
-        "postgresql://postgres:postgres@localhost/gists"
-        )
+    "DATABASE_URL", "postgresql://postgres:postgres@localhost/gists"
+)
 
 # Engine is connection configuration
 engine = create_engine(DATABASE_URL)
@@ -28,6 +27,7 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 # Base is registry of all the tables
 Base = declarative_base()
+
 
 # Open a session, use it, then close it
 def get_db():
@@ -42,9 +42,11 @@ def get_db():
 # models.py
 from sqlalchemy import Column, Integer, String, Boolean, Float, ForeignKey
 from sqlalchemy.orm import relationship
+
 """
 These will be used for our tables in the database
 """
+
 
 # Unique IDs are automatically created by PostgreSQL
 class User(Base):
@@ -57,6 +59,7 @@ class User(Base):
 
     items = relationship("Item", back_populates="owner")
 
+
 class Item(Base):
     __tablename__ = "items"
 
@@ -68,7 +71,6 @@ class Item(Base):
 
     owner = relationship("User", back_populates="items")
 
+
 # Create tables if they don't exist
 Base.metadata.create_all(bind=engine)
-
-

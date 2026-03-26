@@ -30,8 +30,11 @@ DB stuff
 .env 
 `pip install python-dotenv`
 
-Password hashing
+Password hashing -- not working :/
 `pip install "passlib[bcrypt]"`
+
+Security (JWT and password hashing)
+`pip install pyjwt "pwdlib[argon2]`
 
 ### Run
 `uvicorn main:app --reload`
@@ -46,6 +49,9 @@ git add .
 git commit -m "message"
 ```
 
+## Security things
+JSON Web Tokens and Argon2 for security
+
 ## Misc
 
 URLs are like:  
@@ -59,3 +65,5 @@ File structure generally has config stuff in the root folder
 
 Need to make backend/ a python package so that we can run uvicorn from root  
 Need to make app/ a package so that imports can go through for other files  
+
+BROTHER GET A PYTHON FORMATTER

@@ -2,6 +2,9 @@
 
 Log of what I've done for this project
 
+## March 25, 2026
+Went through the FastAPI docs for security, just need to apply it to my own work now
+
 ## March 23, 2026
 Created database  
 Imported some more stuff like python-dotenv and passlib  

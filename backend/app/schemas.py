@@ -33,3 +33,22 @@ class UserOut(BaseModel):
     class Config:
         from_attributes = True
 
+
+# Testing for security purposes
+class TestUser(BaseModel):
+    username: str
+    email: str | None = None
+    full_name: str | None = None
+    disabled: bool | None = None
+
+class TestUserInDB(TestUser):
+    hashed_password: str
+
+class TestToken(BaseModel):
+    access_token: str
+    token_type: str
+
+class TestTokenData(BaseModel):
+    # This was in the docs, but it keeps giving me error?
+    # username: str | None = None
+    username: str

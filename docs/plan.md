@@ -24,3 +24,31 @@ Code snippets include:
 - Id
 - Creator
 
+---
+## More stuff
+I was thinking of doing some things with AWS or Azure stuff, but I think I should 
+stick with the basics for a bit. Maybe in a later project  
+
+Apparently I should be making 3 schemas (one for input, one for db, one for API response)
+for each item, so Users and Snippets
+
+UserIn
+1. username
+2. email
+3. plain password
+
+UserDB - might not need this since its just the table
+1. ID
+2. username
+3. email
+4. hashed password
+5. snippets user owns
+
+UserOut
+1. username
+2. email
+3. snippets user owns
+
+SnippetIn
+SnippetDB
+SnippetOut

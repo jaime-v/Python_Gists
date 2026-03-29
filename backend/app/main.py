@@ -17,6 +17,10 @@ import jwt
 # Devsheets suggestion fro SQL
 from sqlalchemy.orm import Session
 
+# dotenv stuff
+import os
+from dotenv import load_dotenv
+
 # import other files
 from backend.app.schemas import (
     ItemIn,
@@ -30,8 +34,12 @@ from backend.app.schemas import (
 )
 from backend.app.db import get_db, User, Item
 
+load_dotenv()
+
 # Secret key generated with `openssl rand -hex 32`
-SECRET_KEY = "244af04456dee9675f1fef2d21e763fefda16e934d6f88023edcb3ea2814325f"
+SECRET_KEY = os.getenv(
+    "SECRET_KEY", "244af04456dee9675f1fef2d21e763fefda16e934d6f88023edcb3ea2814325f"
+)
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRES_MINUTES = 30
 

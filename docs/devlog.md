@@ -2,6 +2,10 @@
 
 Log of what I've done for this project
 
+## March 28, 2026
+Just a bit of work today, no coding at all
+Just drew out some stuff and modified plan.md file
+
 ## March 25, 2026
 Went through the FastAPI docs for security, just need to apply it to my own work now
 

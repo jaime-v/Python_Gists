@@ -2,6 +2,12 @@
 
 Log of what I've done for this project
 
+## March 29, 2026
+Another planning day to really flesh out what I did yesterday
+Commented out some sample code from devsheets and docs
+Made the models and schema for my own project and renamed them for clarity
+Moved models into their own file
+
 ## March 28, 2026
 Just a bit of work today, no coding at all
 Just drew out some stuff and modified plan.md file

@@ -23,16 +23,15 @@ from dotenv import load_dotenv
 
 # import other files
 from backend.app.schemas import (
-    ItemIn,
-    ItemOut,
-    UserIn,
+    UserCreate,
     UserOut,
     TestUser,
     TestUserInDB,
     TestToken,
     TestTokenData,
 )
-from backend.app.db import get_db, User, Item
+from backend.app.db import get_db
+from backend.app.models import User, Snippet
 
 load_dotenv()
 
@@ -254,8 +253,8 @@ async def get_all_db_users(db: Session = Depends(get_db)):
 
 
 @app.post("/db_user/", response_model=UserOut)
-async def create_db_user(user: UserIn, db: Session = Depends(get_db)):
-    # UserIn has username, email, password
+async def create_db_user(user: UserCreate, db: Session = Depends(get_db)):
+    # UserCreate has username, email, password
     # hashed = hash_password(user.password)
 
     # For now just send plain-text
@@ -272,7 +271,7 @@ async def create_db_user(user: UserIn, db: Session = Depends(get_db)):
 
 @app.put("/db_user/{user_id}/", response_model=UserOut)
 async def update_db_user(
-    user_id: int, updated_user: UserIn, db: Session = Depends(get_db)
+    user_id: int, updated_user: UserCreate, db: Session = Depends(get_db)
 ):
     user_to_update = db.query(User).filter(User.id == user_id).first()
     user_to_update = updated_user

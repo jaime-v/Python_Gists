@@ -68,3 +68,7 @@ Need to make app/ a package so that imports can go through for other files
 
 For formatting, just running :!black % in neovim for now
 But that's kind of cringe honestly -- manually running things -_-
+
+example auth is:
+johndoe
+secret

@@ -8,23 +8,24 @@ We are specifying what goes in and what comes out of our API
 
 from pydantic import BaseModel
 from typing import Optional
+from datetime import datetime
 
 
-class ItemIn(BaseModel):
-    name: str
-    price: float
-    is_offer: Optional[bool] = None
-    id: int
+# class ItemIn(BaseModel):
+#     name: str
+#     price: float
+#     is_offer: Optional[bool] = None
+#     id: int
+#
+#
+# class ItemOut(BaseModel):
+#     name: str
+#     price: float
+#     is_offer: Optional[bool] = None
+#     id: int
 
 
-class ItemOut(BaseModel):
-    name: str
-    price: float
-    is_offer: Optional[bool] = None
-    id: int
-
-
-class UserIn(BaseModel):
+class UserCreate(BaseModel):
     username: str
     email: str
     password: str
@@ -37,6 +38,25 @@ class UserOut(BaseModel):
     # Allows reading from SQLAlchemy objects
     class Config:
         from_attributes = True
+
+class SnippetCreate(BaseModel):
+    title: str
+    language: str
+    description: str
+    code: str
+
+class SnippetOut(BaseModel):
+    title: str
+    language: str
+    description: str
+    code: str
+    owner: UserOut
+    creation_date: datetime
+    last_updated_date: datetime
+
+    class Config:
+        from_attributes = True
+
 
 
 # Testing for security purposes

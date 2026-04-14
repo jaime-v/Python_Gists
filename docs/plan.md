@@ -78,3 +78,10 @@ SnippetOut
 4. code
 5. owner
 6. creation date
+
+
+# TODO:
+Fix backend structure because it looks ugly having my backend specific stuff in my root folder
+Re-read what I'm even working on lol
+Make models and test with endpoints
+Currently I just need to apply what I learned from the Docs and Devsheets into my own stuff

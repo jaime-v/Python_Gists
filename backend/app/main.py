@@ -22,7 +22,7 @@ import os
 from dotenv import load_dotenv
 
 # import other files
-from backend.app.schemas import (
+from app.schemas import (
     UserCreate,
     UserOut,
     TestUser,
@@ -30,8 +30,8 @@ from backend.app.schemas import (
     TestToken,
     TestTokenData,
 )
-from backend.app.db import get_db
-from backend.app.models import User, Snippet
+from app.db import get_db
+from app.models import User, Snippet
 
 load_dotenv()
 

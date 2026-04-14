@@ -3,7 +3,7 @@ from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 from datetime import datetime, timezone
 
-from .db import Base
+from app.db import Base
 
 # Unique IDs are automatically created by PostgreSQL
 class User(Base):

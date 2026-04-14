@@ -18,11 +18,11 @@ FastAPI Docs
 
 ### Install Dependencies
 
-devsheets.io recommendation
+devsheets.io recommendation for minimal
 `pip install fastapi "uvicorn[standard]"`
 
-Create requirements.txt file
-`pip freeze > requirements.txt`
+devsheets recommendation for all (using this)
+`pip install 'fastapi[all]'`
 
 DB stuff
 `pip install sqlalchemy psycopg2-binary`
@@ -30,16 +30,23 @@ DB stuff
 .env 
 `pip install python-dotenv`
 
-Password hashing -- not working :/
+Password hashing -- not working :/ (Not using this because it's old and bald)
 `pip install "passlib[bcrypt]"`
 
 Security (JWT and password hashing)
 `pip install pyjwt "pwdlib[argon2]`
 
+Create requirements.txt file
+`pip freeze > requirements.txt`
+
 ### Run
 `uvicorn main:app --reload`
 Then go to localhost:8000 and/or localhost:8000/docs
 It must be run inside of the virtual environment (backend directory)
+
+Check `which uvicorn` and `which python` and they should be the same
+If one of them is global or something (uvicorn) then you need to run `python -m uvicorn ...`
+Or just reload the venv
 
 ### Git
 If many files are being tracked that we don't want to be tracked, run this:

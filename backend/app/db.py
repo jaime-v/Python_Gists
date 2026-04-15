@@ -1,5 +1,6 @@
-# db.py
 """
+db.py
+
 For managing the database connection and creating our tables
 """
 

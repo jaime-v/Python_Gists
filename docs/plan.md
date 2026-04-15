@@ -25,3 +25,8 @@ stick with the basics for a bit. Maybe in a later project
 # TODO:
 Make models and test with endpoints
 Currently I just need to apply what I learned from the Docs and Devsheets into my own stuff
+
+Snippets table is not showing up...
+Users basic CRUD seems ok except Delete -- because Snippets doesn't exist 
+figure that out first
+Learning some PSQL and SQL commands as we go

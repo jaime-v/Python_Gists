@@ -2,6 +2,9 @@
 
 Log of what I've done for this project
 
+## April 15, 2026
+Did some routing refactoring and tested user routes
+
 ## April 14, 2026
 Done my classes, so going to be working on this finally wooo
 Restructured the directories because they were ugly and debugged structure issues again

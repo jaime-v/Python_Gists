@@ -1,5 +1,6 @@
-# schemas.py
 """
+schemas.py
+
 File for storing all of the Pydantic schemas
 
 Pydantic schemas are used to essentially add type safety to our functions
@@ -40,6 +41,12 @@ class UserOut(BaseModel):
     # Allows reading from SQLAlchemy objects
     class Config:
         from_attributes = True
+
+class UserUpdate(BaseModel):
+    username: str
+    email: str
+    hashed_password: str
+
 
 # Schema for creating a snippet
 class SnippetCreate(BaseModel):

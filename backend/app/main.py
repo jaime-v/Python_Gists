@@ -1,5 +1,6 @@
-# main.py
 """
+main.py
+
 Driver for the code
 """
 
@@ -14,7 +15,7 @@ from jwt.exceptions import InvalidTokenError
 from datetime import datetime, timedelta, timezone
 import jwt
 
-# Devsheets suggestion fro SQL
+# Devsheets suggestion for SQL
 from sqlalchemy.orm import Session
 
 # dotenv stuff
@@ -23,10 +24,6 @@ from dotenv import load_dotenv
 
 # import other files
 from app.schemas import (
-    UserCreate,
-    UserOut,
-    SnippetCreate,
-    SnippetOut,
     TestUser,
     TestUserInDB,
     TestToken,
@@ -34,6 +31,8 @@ from app.schemas import (
 )
 from app.db import get_db
 from app.models import User, Snippet
+
+from .routers import users, snippets
 
 load_dotenv()
 
@@ -46,6 +45,10 @@ ACCESS_TOKEN_EXPIRES_MINUTES = 30
 
 # App starts here
 app = FastAPI()
+
+app.include_router(users.router)
+app.include_router(snippets.router)
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],

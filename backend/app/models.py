@@ -1,4 +1,10 @@
-# models.py
+"""
+models.py
+
+Used for defining database models (tables)
+
+Current tables are the 'users' table with User and 'snippets' table with Snippet
+"""
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 from datetime import datetime, timezone

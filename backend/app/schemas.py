@@ -25,12 +25,14 @@ from datetime import datetime
 #     id: int
 
 
+# Pydantic schema that our API will expect when creating a user
+# I assume it's plain password, then we hash internally
 class UserCreate(BaseModel):
     username: str
     email: str
-    password: str
+    plain_password: str
 
-
+# Schema for a response using the created User's data
 class UserOut(BaseModel):
     username: str
     email: str
@@ -39,17 +41,16 @@ class UserOut(BaseModel):
     class Config:
         from_attributes = True
 
+# Schema for creating a snippet
 class SnippetCreate(BaseModel):
     title: str
     language: str
     description: str
     code: str
 
-class SnippetOut(BaseModel):
-    title: str
-    language: str
-    description: str
-    code: str
+# Schema for a created snippet -- inherits from SnippetCreate because we want to 
+# dsisplay that information as well
+class SnippetOut(SnippetCreate):
     owner: UserOut
     creation_date: datetime
     last_updated_date: datetime

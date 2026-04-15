@@ -73,7 +73,7 @@ File structure generally has config stuff in the root folder
 Need to make backend/ a python package so that we can run uvicorn from root  
 Need to make app/ a package so that imports can go through for other files  
 
-For formatting, just running :!black % in neovim for now
+For formatting, just running `:!black %` in neovim for now
 But that's kind of cringe honestly -- manually running things -_-
 
 example auth is:

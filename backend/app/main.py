@@ -25,6 +25,8 @@ from dotenv import load_dotenv
 from app.schemas import (
     UserCreate,
     UserOut,
+    SnippetCreate,
+    SnippetOut,
     TestUser,
     TestUserInDB,
     TestToken,
@@ -73,7 +75,6 @@ def verify_password(plain_password: str, hashed_password: str):
 @app.get("/")
 async def get_root():
     return {"Root": "Root"}
-
 
 # Fake database for learning security stuff
 
@@ -234,57 +235,3 @@ async def get_users_me_items(
     return [{"item_id": "Foo", "owner": current_user.username}]
 
 
-# Get user from database
-@app.get("/db_user/{user_id}/", response_model=UserOut)
-async def get_db_user(user_id: int, db: Session = Depends(get_db)):
-    # I think this is a query to the User table (class?) filters by user id and
-    # then gets the first row
-    # Then it returns that row?
-    return db.query(User).filter(User.id == user_id).first()
-
-
-# Get users from database
-@app.get("/db_user/")
-async def get_all_db_users(db: Session = Depends(get_db)):
-    # I think this is a query to the User table (class?) filters by user id and
-    # then gets the first row
-    # Then it returns that row?
-    return db.query(User).all()
-
-
-@app.post("/db_user/", response_model=UserOut)
-async def create_db_user(user: UserCreate, db: Session = Depends(get_db)):
-    # UserCreate has username, email, password
-    # hashed = hash_password(user.password)
-
-    # For now just send plain-text
-    hashed = user.password
-    db_user = User(username=user.username, email=user.email, hashed_password=hashed)
-    # Add and commit are like staging and committing changes
-    db.add(db_user)
-    db.commit()
-    # Refresh will get an up-to-date version of the object from database
-    db.refresh(db_user)
-    # Return it right after
-    return db_user
-
-
-@app.put("/db_user/{user_id}/", response_model=UserOut)
-async def update_db_user(
-    user_id: int, updated_user: UserCreate, db: Session = Depends(get_db)
-):
-    user_to_update = db.query(User).filter(User.id == user_id).first()
-    user_to_update = updated_user
-    db.commit()
-    db.refresh(user_to_update)
-    return user_to_update
-
-
-@app.delete(
-    "/db_user/{user_id}/", response_model=UserOut, status_code=status.HTTP_201_CREATED
-)
-async def delete_db_user(user_id: int, db: Session = Depends(get_db)):
-    user_to_delete = db.query(User).filter(User.id == user_id).first()
-    db.delete(user_to_delete)
-    db.commit()
-    return user_to_delete

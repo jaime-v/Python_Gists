@@ -6,7 +6,8 @@ hopefully memorize in the future
 References:  
 Traversy Media FastAPI crash course  
 Devsheets.io/sheets/fastapi  
-FastAPI Docs
+FastAPI Docs  
+Corey Schafer FastAPI Tutorial Playlist
 
 ## Setup
 
@@ -58,6 +59,12 @@ git commit -m "message"
 
 ## Security things
 JSON Web Tokens and Argon2 for security
+
+## Database things
+Importing Base (declarative base) into other modules doesn't seem to work,
+either because of creating multiple bases, or by calling without all models
+Fix is to make the main.py file call an init function that is in db.py
+This ensures that all of the models are loaded into the Base metadata
 
 ## Misc
 

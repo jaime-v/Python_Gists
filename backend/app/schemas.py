@@ -7,7 +7,7 @@ Pydantic schemas are used to essentially add type safety to our functions
 We are specifying what goes in and what comes out of our API
 """
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional
 from datetime import datetime
 
@@ -43,9 +43,9 @@ class UserOut(BaseModel):
         from_attributes = True
 
 class UserUpdate(BaseModel):
-    username: str
-    email: str
-    hashed_password: str
+    username: Optional[str] = Field(default=None)
+    email: Optional[str] = Field(default=None)
+    hashed_password: Optional[str] = Field(default=None)
 
 
 # Schema for creating a snippet
@@ -64,6 +64,13 @@ class SnippetOut(SnippetCreate):
 
     class Config:
         from_attributes = True
+
+# Update snippet -- its in the name
+class SnippetUpdate(BaseModel):
+    title: Optional[str] = Field(default=None)
+    language: Optional[str] = Field(default=None)
+    description: Optional[str] = Field(default=None)
+    code: Optional[str] = Field(default=None)
 
 
 

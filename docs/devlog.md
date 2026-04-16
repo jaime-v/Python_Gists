@@ -4,6 +4,17 @@ Log of what I've done for this project
 
 ## April 15, 2026
 Did some routing refactoring and tested user routes
+Fixed the database not actually creating tables 
+    Bug occurred for one of two reasons 
+    1. Maybe the Base we imported wasn't the same -- users was already created, so not sure
+    2. Maybe the create_all function was being called before all the models were loaded
+    Either way, creating an init function and calling it in main.py was the solution
+All CRUD operations seem to work
+Bit of a wacky thing though -- since we expect SnippetOut response to include user, we
+get errors when there is no user, but PSQL can default it to null in the database so
+it ends up working still
+Should fix this in the long run, but it works for now
+Also added the timing middleware from the Traversy Media video
 
 ## April 14, 2026
 Done my classes, so going to be working on this finally wooo

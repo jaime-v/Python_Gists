@@ -1,5 +1,5 @@
 """
-routers/users.py
+routes/users.py
 
 Defines the routes/endpoints in the API for users
 """
@@ -15,14 +15,14 @@ from app.schemas import (
 from app.db import get_db
 from app.models import User
 
-router = APIRouter()
+router = APIRouter(prefix="/users", tags=["users"])
 
 # Basic routes would just be CRUD for User and Snippet
 # Let's hardcode it for now
 
 
 # Get user from database
-@router.get("/user/{user_id}/", response_model=UserOut)
+@router.get("/{user_id}/", response_model=UserOut)
 async def get_user(user_id: int, db: Session = Depends(get_db)):
     # I think this is a query to the User table (class?) filters by user id and
     # then gets the first row
@@ -34,14 +34,14 @@ async def get_user(user_id: int, db: Session = Depends(get_db)):
 
 
 # Get all users from database
-@router.get("/user/")
+@router.get("/")
 async def get_all_users(db: Session = Depends(get_db)):
     # Is this like an array? object?
     return db.query(User).all()
 
 
 # Create user in database
-@router.post("/user/", response_model=UserOut)
+@router.post("/", response_model=UserOut, status_code=status.HTTP_201_CREATED)
 async def create_user(user: UserCreate, db: Session = Depends(get_db)):
     # UserCreate has username, email, password
     # hashed = hash_password(user.password)
@@ -58,7 +58,7 @@ async def create_user(user: UserCreate, db: Session = Depends(get_db)):
     return new_user
 
 
-@router.put("/user/{user_id}/", response_model=UserOut)
+@router.put("/{user_id}/", response_model=UserOut)
 async def update_user(
     user_id: int, updated_user: UserUpdate, db: Session = Depends(get_db)
 ):
@@ -77,7 +77,7 @@ async def update_user(
 
 
 @router.delete(
-    "/user/{user_id}/", status_code=status.HTTP_204_NO_CONTENT
+    "/{user_id}/", status_code=status.HTTP_204_NO_CONTENT
 )
 async def delete_user(user_id: int, db: Session = Depends(get_db)):
     user_to_delete = db.query(User).filter(User.id == user_id).first()

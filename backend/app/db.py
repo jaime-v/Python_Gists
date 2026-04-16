@@ -29,7 +29,6 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 # Base is registry of all the tables
 Base = declarative_base()
 
-
 # Open a session, use it, then close it
 def get_db():
     db = SessionLocal()
@@ -38,7 +37,6 @@ def get_db():
     finally:
         db.close()
 
-
-# I think this should be its own file, but idk
 # Create tables if they don't exist
-Base.metadata.create_all(bind=engine)
+def init_db():
+    Base.metadata.create_all(bind=engine)

@@ -15,9 +15,6 @@ from jwt.exceptions import InvalidTokenError
 from datetime import datetime, timedelta, timezone
 import jwt
 
-# Devsheets suggestion for SQL
-from sqlalchemy.orm import Session
-
 # dotenv stuff
 import os
 from dotenv import load_dotenv
@@ -29,10 +26,10 @@ from app.schemas import (
     TestToken,
     TestTokenData,
 )
-from app.db import get_db
-from app.models import User, Snippet
 
-from .routers import users, snippets
+from app.routes import users, snippets
+from app.middleware import timing
+from app.db import init_db
 
 load_dotenv()
 
@@ -49,12 +46,16 @@ app = FastAPI()
 app.include_router(users.router)
 app.include_router(snippets.router)
 
+app.middleware("http")(timing.timing_middleware)
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+init_db()
 
 # Security
 password_hash = PasswordHash.recommended()

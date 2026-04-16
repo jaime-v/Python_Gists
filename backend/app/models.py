@@ -22,19 +22,6 @@ class User(Base):
 
     snippets = relationship("Snippet", back_populates="owner")
 
-
-# class Item(Base):
-#     __tablename__ = "items"
-#
-#     id = Column(Integer, primary_key=True, index=True)
-#     title = Column(String, index=True)
-#     description = Column(String)
-#     price = Column(Float)
-#     owner_id = Column(Integer, ForeignKey("users.id"))
-#
-#     owner = relationship("User", back_populates="items")
-
-
 class Snippet(Base):
     __tablename__ = "snippets"
 
@@ -57,5 +44,15 @@ class Snippet(Base):
     # Not sure when relationship is useful, i just have it in because of devsheets
     owner = relationship("User", back_populates="snippets")
 
+# class Item(Base):
+#     __tablename__ = "items"
+#
+#     id = Column(Integer, primary_key=True, index=True)
+#     title = Column(String, index=True)
+#     description = Column(String)
+#     price = Column(Float)
+#     owner_id = Column(Integer, ForeignKey("users.id"))
+#
+#     owner = relationship("User", back_populates="items")
 
 

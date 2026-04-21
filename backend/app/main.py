@@ -32,6 +32,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 # Just a root get
 @app.get("/")
 async def get_root():

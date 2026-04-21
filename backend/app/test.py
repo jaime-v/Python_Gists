@@ -388,3 +388,36 @@ async def delete_item(item_id: int):
 # ACCESS_TOKEN_EXPIRES_MINUTES = 30
 
 
+# Testing for security purposes
+# class TestUser(BaseModel):
+#     username: str
+#     email: str | None = None
+#     full_name: str | None = None
+#     disabled: bool | None = None
+#
+#
+# class TestUserInDB(TestUser):
+#     hashed_password: str
+#
+#
+# class TestToken(BaseModel):
+#     access_token: str
+#     token_type: str
+#
+#
+# class TestTokenData(BaseModel):
+#     # This was in the docs, but it keeps giving me error?
+#     # username: str | None = None
+#     username: str
+
+
+# class Item(Base):
+#     __tablename__ = "items"
+#
+#     id = Column(Integer, primary_key=True, index=True)
+#     title = Column(String, index=True)
+#     description = Column(String)
+#     price = Column(Float)
+#     owner_id = Column(Integer, ForeignKey("users.id"))
+#
+#     owner = relationship("User", back_populates="items")

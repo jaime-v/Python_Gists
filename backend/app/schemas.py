@@ -11,24 +11,11 @@ from pydantic import BaseModel, Field, ConfigDict, EmailStr
 from typing import Optional
 from datetime import datetime
 
-# class ItemIn(BaseModel):
-#     name: str
-#     price: float
-#     is_offer: Optional[bool] = None
-#     id: int
-#
-#
-# class ItemOut(BaseModel):
-#     name: str
-#     price: float
-#     is_offer: Optional[bool] = None
-#     id: int
-
 
 # Pydantic schema for the base of each user
 class UserBase(BaseModel):
-    username: str = Field(min_length=1, max_length=100)
-    email: EmailStr = Field(max_length=250)
+    username: str = Field(min_length=1, max_length=50)
+    email: EmailStr = Field(max_length=120)
 
 
 # On creation, we also need the user password
@@ -38,8 +25,9 @@ class UserCreate(UserBase):
 
 # Separate UserResponse schema into public and private
 
+
 # If a user wants their own information, they can see it all
-# If a different user requests another user's information, 
+# If a different user requests another user's information,
 # they receive only publicly available information
 class UserPublic(BaseModel):
     # Modern version of class Config
@@ -51,8 +39,10 @@ class UserPublic(BaseModel):
     # class Config:
     #     from_attributes = True
 
+
 class UserPrivate(UserPublic):
     email: EmailStr
+
 
 # Update user schema has optional fields
 class UserUpdate(BaseModel):
@@ -61,8 +51,7 @@ class UserUpdate(BaseModel):
     hashed_password: Optional[str] = Field(default=None)
 
 
-# Schema for creating a snippet
-class SnippetCreate(BaseModel):
+class SnippetBase(BaseModel):
     title: str = Field(min_length=1, max_length=50)
     language: str = Field(min_length=1, max_length=50)
     description: str = Field(min_length=1, max_length=500)
@@ -70,9 +59,14 @@ class SnippetCreate(BaseModel):
     owner_id: int
 
 
+# Schema for creating a snippet
+class SnippetCreate(SnippetBase):
+    pass
+
+
 # Schema for a created snippet -- inherits from SnippetCreate because we want to
 # dsisplay that information as well
-class SnippetResponse(SnippetCreate):
+class SnippetResponse(SnippetBase):
     model_config = ConfigDict(from_attributes=True)
     owner: UserPublic
     creation_date: datetime
@@ -89,28 +83,7 @@ class SnippetUpdate(BaseModel):
     description: Optional[str] = Field(default=None)
     code: Optional[str] = Field(default=None)
 
+
 class Token(BaseModel):
     access_token: str
     token_type: str
-
-# Testing for security purposes
-class TestUser(BaseModel):
-    username: str
-    email: str | None = None
-    full_name: str | None = None
-    disabled: bool | None = None
-
-
-class TestUserInDB(TestUser):
-    hashed_password: str
-
-
-class TestToken(BaseModel):
-    access_token: str
-    token_type: str
-
-
-class TestTokenData(BaseModel):
-    # This was in the docs, but it keeps giving me error?
-    # username: str | None = None
-    username: str

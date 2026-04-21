@@ -36,7 +36,7 @@ router = APIRouter(prefix="/api/users", tags=["users"])
 
 
 # Create user in database
-@router.post("/", response_model=UserPrivate, status_code=status.HTTP_201_CREATED)
+@router.post("", response_model=UserPrivate, status_code=status.HTTP_201_CREATED)
 async def create_user(user: UserCreate, db: Annotated[AsyncSession, Depends(get_db)]):
     result = await db.execute(
         select(models.User).where(
@@ -174,7 +174,7 @@ async def get_user_snippets(user_id: int, db: Annotated[AsyncSession, Depends(ge
 
 
 # Get all users from database
-@router.get("/", response_model=list[UserPublic])
+@router.get("", response_model=list[UserPublic])
 async def get_all_users(db: Annotated[AsyncSession, Depends(get_db)]):
     result = await db.execute(select(models.User))
     users = result.scalars().all()

@@ -1,5 +1,5 @@
 """
-routes/snippets.py
+routers/snippets.py
 
 Defines the routes/endpoints in the API for snippets
 """
@@ -10,17 +10,17 @@ from sqlalchemy.orm import Session
 from app.schemas import (
     SnippetCreate,
     SnippetUpdate,
-    SnippetOut,
+    SnippetResponse,
 )
 from app.db import get_db
 from app.models import Snippet
 
 # Traversy Media puts prefix as /api/v1/items
-router = APIRouter(prefix="/snippets", tags=["snippets"])
+router = APIRouter(prefix="/api/snippets", tags=["snippets"])
 
 
 # Snippets
-@router.get("/{snippet_id}/", response_model=SnippetOut)
+@router.get("/{snippet_id}/", response_model=SnippetResponse)
 async def get_snippet(snippet_id: int, db: Session = Depends(get_db)):
     return db.query(Snippet).filter(Snippet.id == snippet_id).first()
 
@@ -54,7 +54,7 @@ async def get_snippets(db: Session = Depends(get_db)):
 #
 
 
-@router.post("/", response_model=SnippetOut)
+@router.post("/", response_model=SnippetResponse)
 async def create_snippet(snippet: SnippetCreate, db: Session = Depends(get_db)):
     new_snippet = Snippet(
         title=snippet.title,
@@ -69,7 +69,7 @@ async def create_snippet(snippet: SnippetCreate, db: Session = Depends(get_db)):
     return new_snippet
 
 
-@router.put("/{snippet_id}/", response_model=SnippetOut)
+@router.put("/{snippet_id}/", response_model=SnippetResponse)
 async def update_snippet(
     snippet_id: int, updated_snippet: SnippetUpdate, db: Session = Depends(get_db)
 ):

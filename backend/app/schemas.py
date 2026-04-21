@@ -7,10 +7,9 @@ Pydantic schemas are used to essentially add type safety to our functions
 We are specifying what goes in and what comes out of our API
 """
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict, EmailStr
 from typing import Optional
 from datetime import datetime
-
 
 # class ItemIn(BaseModel):
 #     name: str
@@ -26,22 +25,36 @@ from datetime import datetime
 #     id: int
 
 
-# Pydantic schema that our API will expect when creating a user
-# I assume it's plain password, then we hash internally
-class UserCreate(BaseModel):
-    username: str
-    email: str
-    plain_password: str
+# Pydantic schema for the base of each user
+class UserBase(BaseModel):
+    username: str = Field(min_length=1, max_length=100)
+    email: EmailStr = Field(max_length=250)
 
-# Schema for a response using the created User's data
-class UserOut(BaseModel):
+
+# On creation, we also need the user password
+class UserCreate(UserBase):
+    plain_password: str = Field(min_length=8)
+
+
+# Separate UserResponse schema into public and private
+
+# If a user wants their own information, they can see it all
+# If a different user requests another user's information, 
+# they receive only publicly available information
+class UserPublic(BaseModel):
+    # Modern version of class Config
+    model_config = ConfigDict(from_attributes=True)
+    id: int
     username: str
-    email: str
 
     # Allows reading from SQLAlchemy objects
-    class Config:
-        from_attributes = True
+    # class Config:
+    #     from_attributes = True
 
+class UserPrivate(UserPublic):
+    email: EmailStr
+
+# Update user schema has optional fields
 class UserUpdate(BaseModel):
     username: Optional[str] = Field(default=None)
     email: Optional[str] = Field(default=None)
@@ -50,20 +63,24 @@ class UserUpdate(BaseModel):
 
 # Schema for creating a snippet
 class SnippetCreate(BaseModel):
-    title: str
-    language: str
-    description: str
-    code: str
+    title: str = Field(min_length=1, max_length=50)
+    language: str = Field(min_length=1, max_length=50)
+    description: str = Field(min_length=1, max_length=500)
+    code: str = Field(min_length=1, max_length=500)
+    owner_id: int
 
-# Schema for a created snippet -- inherits from SnippetCreate because we want to 
+
+# Schema for a created snippet -- inherits from SnippetCreate because we want to
 # dsisplay that information as well
-class SnippetOut(SnippetCreate):
-    owner: UserOut
+class SnippetResponse(SnippetCreate):
+    model_config = ConfigDict(from_attributes=True)
+    owner: UserPublic
     creation_date: datetime
     last_updated_date: datetime
 
-    class Config:
-        from_attributes = True
+    # class Config:
+    #     from_attributes = True
+
 
 # Update snippet -- its in the name
 class SnippetUpdate(BaseModel):
@@ -72,7 +89,9 @@ class SnippetUpdate(BaseModel):
     description: Optional[str] = Field(default=None)
     code: Optional[str] = Field(default=None)
 
-
+class Token(BaseModel):
+    access_token: str
+    token_type: str
 
 # Testing for security purposes
 class TestUser(BaseModel):

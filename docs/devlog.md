@@ -2,6 +2,27 @@
 
 Log of what I've done for this project
 
+## April 20, 2026
+Authentication uses pwdlib[argon2], pyjwt, and pydantic-settings
+Added in Authentication so user's get a json web token
+Adjusted models to use mapped and mapped_column
+Adjusted schemas to better reflect responses, have more validation checks, modern structure
+Adjusted routes for validation
+
+## April 17, 2026
+More video watching
+Can probably get work done tomorrow, gonna start with cleaning up the routes
+Then we can move on to database stuff, using async, authentication and authorization
+Learned that using Optional[type] is not good and using type | None is preferred
+
+Okay I'm getting bored of just watching videos
+I'll go back to the videos if I need help
+
+## April 16, 2026
+Watching a bunch of Corey Schafer videos because his FastAPI tutorial seems really good
+So I'll watch all of it and take some notes and then probably get back on this project later
+Maybe like 2-3 days
+
 ## April 15, 2026
 Did some routing refactoring and tested user routes
 Fixed the database not actually creating tables 

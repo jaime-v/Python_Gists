@@ -42,6 +42,7 @@ Create requirements.txt file
 
 ### Run
 `uvicorn main:app --reload`
+`fastapi dev main.py`
 Then go to localhost:8000 and/or localhost:8000/docs
 It must be run inside of the virtual environment (backend directory)
 
@@ -59,12 +60,43 @@ git commit -m "message"
 
 ## Security things
 JSON Web Tokens and Argon2 for security
+JSON Web Tokens contain
+- a header with algorithm and type
+- a payload with data and expiration
+- a signature, proving that the token wasn't tampered with
+All 3 parts of base64 encoded and separated by dots
+
+Not using .env directly because pydantic-settings is supposedly better
 
 ## Database things
 Importing Base (declarative base) into other modules doesn't seem to work,
 either because of creating multiple bases, or by calling without all models
 Fix is to make the main.py file call an init function that is in db.py
 This ensures that all of the models are loaded into the Base metadata
+
+Generally, create_all is bad because it only creates tables if they do not exist
+It's fine in small cases, but if we ever have an additional field that is being added, we can't
+just delete and recreate everything from scratch
+So we need to have a migration system in place
+
+We are going to use Alembic for database migrations, it basically works like a version control
+for the database
+Migrations will track schema changes over time, apply changes safely, think of each migration
+file as a git commit for the database, recording what changed and moving forward or backward
+
+pip install alembic
+alembic init -t async alembic (async template and the directory where migration files live)
+
+alembic.ini - remove database.url because we are setting it programmatically
+alembic/env.py - import models, settings, Base (in that order)
+Need to make sure that our models are registered in Base metadata, otherwise Alembic won't see it
+Set database url, and target metadata
+
+## Structure things
+I think how it works is we run from whatever directory .venv is in
+Or maybe it's the root directory
+But either way, we need to access modules via app.<module> and we can access
+    things that are inside the root backend directory with just the name, like config
 
 ## Misc
 
@@ -86,3 +118,9 @@ But that's kind of cringe honestly -- manually running things -_-
 example auth is:
 johndoe
 secret
+
+### For later projects
+Later projects should use the new stuff:
+Migrate to postgresql 18, "psycopg[binary]" instead of psycopg2-binary
+Also use uv instead of pip
+Bunch of other stuff

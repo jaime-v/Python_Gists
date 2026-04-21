@@ -23,10 +23,14 @@ stick with the basics for a bit. Maybe in a later project
 
 
 # TODO:
-Make models and test with endpoints
-Currently I just need to apply what I learned from the Docs and Devsheets into my own stuff
+Thinking about making things more modern, like using Mapped[type] and mapped_column
+But I think I'll just roll with my own stuff for now and then do the rest of it later
+if I really need to
 
-Snippets table is not showing up...
-Users basic CRUD seems ok except Delete -- because Snippets doesn't exist 
-figure that out first
-Learning some PSQL and SQL commands as we go
+
+- Authentication with JWT
+- Authorization so user's can only perform their own operations
+- Snippets cannot be created unless there is an owner (and other validation things)
+- Async Database
+- Modernized things
+

@@ -4,39 +4,21 @@ db.py
 For managing the database connection and creating our tables
 """
 
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
-import os
-from dotenv import load_dotenv
+# Apparently this is better than creating a declarative base instance
+from sqlalchemy.orm import DeclarativeBase
+# Async database things
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
-# Devsheets Suggestion
-# DATABASE_URL = "sqlite.///./app.db"
-load_dotenv()
+from config import settings
 
-# Good practice to add a fallback database, but I don't have that currently
-DATABASE_URL = os.getenv(
-    "DATABASE_URL", "postgresql://postgres:postgres@localhost/gists"
-)
+engine = create_async_engine(
+        settings.database_url
+        )
+AsyncSessionLocal = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False,)
+class Base(DeclarativeBase):
+    pass
 
-# Engine is connection configuration
-engine = create_engine(DATABASE_URL)
+async def get_db():
+    async with AsyncSessionLocal() as session:
+        yield session
 
-# SessionLocal is a sessionmaker, is creates sessions
-# Sessions are actual connections to the database
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-# Base is registry of all the tables
-Base = declarative_base()
-
-# Open a session, use it, then close it
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-# Create tables if they don't exist
-def init_db():
-    Base.metadata.create_all(bind=engine)

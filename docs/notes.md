@@ -79,6 +79,8 @@ It's fine in small cases, but if we ever have an additional field that is being 
 just delete and recreate everything from scratch
 So we need to have a migration system in place
 
+.scalars().first() returns either the first object or None if there are no matches
+
 We are going to use Alembic for database migrations, it basically works like a version control
 for the database
 Migrations will track schema changes over time, apply changes safely, think of each migration
@@ -99,6 +101,10 @@ But either way, we need to access modules via app.<module> and we can access
     things that are inside the root backend directory with just the name, like config
 
 ## Misc
+
+Annotated is for type safe dependencies
+`func (db: Annotated[Session, Depends(get_db)]):`
+Before running the function, call get_db and pass it in as the db parameter
 
 URLs are like:  
 http://localhost:<port>/?query=query_val#fragment  

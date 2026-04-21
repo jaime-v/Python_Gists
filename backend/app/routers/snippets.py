@@ -27,6 +27,16 @@ router = APIRouter(prefix="/api/snippets", tags=["snippets"])
 async def create_snippet(
     snippet: SnippetCreate, db: Annotated[AsyncSession, Depends(get_db)]
 ):
+    # Verify that user exists before creating the new snippet
+    result = await db.execute(
+        select(models.User).where(models.User.id == snippet.owner_id)
+    )
+    user = result.scalars().first()
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found",
+        )
     new_snippet = models.Snippet(
         title=snippet.title,
         language=snippet.language,

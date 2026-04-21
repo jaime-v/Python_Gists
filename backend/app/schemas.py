@@ -56,18 +56,18 @@ class SnippetBase(BaseModel):
     language: str = Field(min_length=1, max_length=50)
     description: str = Field(min_length=1, max_length=500)
     code: str = Field(min_length=1, max_length=500)
-    owner_id: int
 
 
 # Schema for creating a snippet
 class SnippetCreate(SnippetBase):
-    pass
+    owner_id: int
 
 
 # Schema for a created snippet -- inherits from SnippetCreate because we want to
-# dsisplay that information as well
+# display that information as well
 class SnippetResponse(SnippetBase):
     model_config = ConfigDict(from_attributes=True)
+    id: int
     owner: UserPublic
     creation_date: datetime
     last_updated_date: datetime

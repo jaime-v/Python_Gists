@@ -21,6 +21,9 @@ User can create/edit/delete code snippets
 I was thinking of doing some things with AWS or Azure stuff, but I think I should 
 stick with the basics for a bit. Maybe in a later project  
 
+Corey Schafer's blog tutorial video series has user profile pics, maybe that would be
+useful to learn and improve the app
+
 
 # TODO:
 Thinking about making things more modern, like using Mapped[type] and mapped_column

@@ -164,10 +164,7 @@ async def get_user_snippets(user_id: int, db: Annotated[AsyncSession, Depends(ge
             detail="User not found",
         )
     result = await db.execute(
-        select(models.Snippet)
-        .options(selectinload(models.Snippet.owner_id))
-        .where(models.Snippet.owner_id == user_id)
-        .order_by(models.Snippet.last_updated_date.desc())
+        select(models.Snippet).where(models.Snippet.owner_id == user_id)
     )
     snippets = result.scalars().all()
     return snippets

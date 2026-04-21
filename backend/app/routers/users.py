@@ -178,6 +178,60 @@ async def get_all_users(db: Annotated[AsyncSession, Depends(get_db)]):
     return users
 
 
+# Not sure if this is necessary because users shouldn't be changing their entire profile
+# @router.put("/{user_id}", response_model=UserPrivate)
+# async def update_user_full(
+#     user_id: int, updated_user: UserCreate, db: Annotated[AsyncSession, Depends(get_db)]
+# ):
+#     # Get user to update
+#     result = await db.execute(select(models.User).where(models.User.id == user_id))
+#     user_to_update = result.scalars().first()
+#     if not user_to_update:
+#         raise HTTPException(
+#             status_code=status.HTTP_404_NOT_FOUND,
+#             detail="User not found",
+#         )
+#
+#     # If we are changing username, make sure the username is not taken
+#     if updated_user.username.lower() != user_to_update.username.lower():
+#         result = await db.execute(
+#             select(models.User).where(
+#                 func.lower(models.User.username) == updated_user.username.lower()
+#             )
+#         )
+#         existing_user = result.scalars().first()
+#         if existing_user:
+#             raise HTTPException(
+#                 status_code=status.HTTP_400_BAD_REQUEST,
+#                 detail="Username already exists",
+#             )
+#
+#     # If we are changing email, make sure the email is not taken
+#     if updated_user.email.lower() != user_to_update.email.lower():
+#         result = await db.execute(
+#             select(models.User).where(
+#                 func.lower(models.User.email) == updated_user.email.lower()
+#             )
+#         )
+#         existing_email = result.scalars().first()
+#         if existing_email:
+#             raise HTTPException(
+#                 status_code=status.HTTP_400_BAD_REQUEST,
+#                 detail="Email is already registered",
+#             )
+#     # Update and commit changes
+#     # for key, val in updated_user.model_dump(exclude_unset=True).items():
+#     #     setattr(user_to_update, key, val)
+#     # We don't use model_dump here because we need to modify the user email
+#     user_to_update.username = updated_user.username
+#     user_to_update.email = updated_user.email.lower()
+#     user_to_update.hashed_password = hash_password(updated_user.plain_password)
+#
+#     await db.commit()
+#     await db.refresh(user_to_update)
+#     return user_to_update
+
+
 @router.patch("/{user_id}", response_model=UserPrivate)
 async def update_user(
     user_id: int, updated_user: UserUpdate, db: Annotated[AsyncSession, Depends(get_db)]
@@ -228,10 +282,13 @@ async def update_user(
     # Update and commit changes
     # for key, val in updated_user.model_dump(exclude_unset=True).items():
     #     setattr(user_to_update, key, val)
+    # We don't use model_dump here because we need to modify the user email
     if updated_user.username is not None:
         user_to_update.username = updated_user.username
     if updated_user.email is not None:
         user_to_update.email = updated_user.email.lower()
+    if updated_user.plain_password is not None:
+        user_to_update.hashed_password = hash_password(updated_user.plain_password)
 
     await db.commit()
     await db.refresh(user_to_update)

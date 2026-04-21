@@ -8,7 +8,6 @@ We are specifying what goes in and what comes out of our API
 """
 
 from pydantic import BaseModel, Field, ConfigDict, EmailStr
-from typing import Optional
 from datetime import datetime
 
 
@@ -46,9 +45,9 @@ class UserPrivate(UserPublic):
 
 # Update user schema has optional fields
 class UserUpdate(BaseModel):
-    username: Optional[str] = Field(default=None)
-    email: Optional[str] = Field(default=None)
-    hashed_password: Optional[str] = Field(default=None)
+    username: str | None = Field(default=None)
+    email: str | None = Field(default=None)
+    plain_password: str | None = Field(default=None)
 
 
 class SnippetBase(BaseModel):
@@ -78,10 +77,11 @@ class SnippetResponse(SnippetBase):
 
 # Update snippet -- its in the name
 class SnippetUpdate(BaseModel):
-    title: Optional[str] = Field(default=None)
-    language: Optional[str] = Field(default=None)
-    description: Optional[str] = Field(default=None)
-    code: Optional[str] = Field(default=None)
+    title: str | None = Field(default=None)
+    language: str | None = Field(default=None)
+    description: str | None = Field(default=None)
+    code: str | None = Field(default=None)
+    owner_id: int | None = Field(default=None)
 
 
 class Token(BaseModel):

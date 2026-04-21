@@ -37,3 +37,5 @@ if I really need to
 - Async Database
 - Modernized things
 
+Need to test everything once it gets running because I think that is it for the backend
+

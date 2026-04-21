@@ -8,7 +8,7 @@ Added in Authentication so user's get a json web token
 Adjusted models to use mapped and mapped_column
 Adjusted schemas to better reflect responses, have more validation checks, modern structure
 Adjusted routes for validation
-Did updates according to Corey Schafer videos
+Did updates according to Corey Schafer videos (which ended up being a lot)
 
 ## April 17, 2026
 More video watching

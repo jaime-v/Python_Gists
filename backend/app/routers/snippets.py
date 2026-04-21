@@ -72,19 +72,70 @@ async def get_snippets(db: Annotated[AsyncSession, Depends(get_db)]):
 
 
 @router.put("/{snippet_id}", response_model=SnippetResponse)
-async def update_snippet(
+async def update_snippet_full(
     snippet_id: int,
-    updated_snippet: SnippetUpdate,
+    updated_snippet: SnippetCreate,
     db: Annotated[AsyncSession, Depends(get_db)],
 ):
-    snippet_to_update = db.execute(
+
+    result = await db.execute(
         select(models.Snippet).where(models.Snippet.id == snippet_id)
     )
+    snippet_to_update = result.scalars().first()
+    # If snippet doesn't exist, then error
     if not snippet_to_update:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Snippet not found",
         )
+    # If the updated snippet has a different owner, then check to make sure the new owner exists
+    if updated_snippet.owner_id != snippet_to_update.owner_id:
+        result = await db.execute(
+            select(models.User.id).where(models.User.id == updated_snippet.owner_id)
+        )
+        user = result.scalars().first()
+        if not user:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="User not found",
+            )
+    snippet_to_update.title = updated_snippet.title
+    snippet_to_update.language = updated_snippet.language
+    snippet_to_update.description = updated_snippet.description
+    snippet_to_update.code = updated_snippet.code
+    snippet_to_update.owner_id = updated_snippet.owner_id
+    await db.commit()
+    await db.refresh(snippet_to_update)
+    return snippet_to_update
+
+
+@router.patch("/{snippet_id}", response_model=SnippetResponse)
+async def update_snippet_partial(
+    snippet_id: int,
+    updated_snippet: SnippetUpdate,
+    db: Annotated[AsyncSession, Depends(get_db)],
+):
+    result = await db.execute(
+        select(models.Snippet).where(models.Snippet.id == snippet_id)
+    )
+    snippet_to_update = result.scalars().first()
+    # If snippet doesn't exist, then error
+    if not snippet_to_update:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Snippet not found",
+        )
+    # If the updated snippet has a different owner, then check to make sure the new owner exists
+    if updated_snippet.owner_id != snippet_to_update.owner_id:
+        result = await db.execute(
+            select(models.User.id).where(models.User.id == updated_snippet.owner_id)
+        )
+        user = result.scalars().first()
+        if not user:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="User not found",
+            )
     for key, val in updated_snippet.model_dump(exclude_unset=True).items():
         setattr(snippet_to_update, key, val)
     await db.commit()

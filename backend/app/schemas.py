@@ -46,7 +46,7 @@ class UserPrivate(UserPublic):
 # Update user schema has optional fields
 class UserUpdate(BaseModel):
     username: str | None = Field(default=None)
-    email: str | None = Field(default=None)
+    email: EmailStr | None = Field(default=None)
     plain_password: str | None = Field(default=None)
 
 

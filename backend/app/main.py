@@ -4,17 +4,33 @@ main.py
 Driver for the code
 """
 
+from contextlib import asynccontextmanager
+
+# For the lifespan function
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+# from fastapi.exception_handlers import (
+#     http_exception_handler,
+#     request_validation_exception_handler,
+# )
+
 from app.routers import users, snippets
 from app.middleware import timing
-from app.db import engine, get_db
+from app.db import engine, get_db, Base
 
-# @asynccontextmanager
-# async def lifespan(_app: FastAPI):
-#     yield
-#     await engine.dispose()
+
+# Lifespan handles on startup and on shutdown events
+@asynccontextmanager
+async def lifespan(_app: FastAPI):
+    # Startup
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+    yield
+    # Shutdown
+    await engine.dispose()
+
 
 # App starts here
 # app = FastAPI(lifespan=lifespan)
@@ -35,5 +51,5 @@ app.add_middleware(
 
 # Just a root get
 @app.get("/")
-async def get_root():
+def get_root():
     return {"Root": "Root"}

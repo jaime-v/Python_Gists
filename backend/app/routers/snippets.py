@@ -6,6 +6,7 @@ Defines the routes/endpoints in the API for snippets
 
 from fastapi import Depends, status, APIRouter, HTTPException
 from sqlalchemy import select
+from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import Annotated
 
@@ -46,14 +47,18 @@ async def create_snippet(
     )
     db.add(new_snippet)
     await db.commit()
-    await db.refresh(new_snippet)
+    # Need the owner for the response apparently
+    await db.refresh(new_snippet, attribute_names=["owner"])
     return new_snippet
 
 
 @router.get("/{snippet_id}", response_model=SnippetResponse)
 async def get_snippet(snippet_id: int, db: Annotated[AsyncSession, Depends(get_db)]):
     result = await db.execute(
-        select(models.Snippet).where(models.Snippet.id == snippet_id)
+        # select(models.Snippet).where(models.Snippet.id == snippet_id)
+        select(models.Snippet)
+        .options(selectinload(models.Snippet.owner))
+        .where(models.Snippet.id == snippet_id)
     )
     snippet = result.scalars().first()
     if not snippet:
@@ -64,9 +69,11 @@ async def get_snippet(snippet_id: int, db: Annotated[AsyncSession, Depends(get_d
     return snippet
 
 
-@router.get("")
+@router.get("", response_model=list[SnippetResponse])
 async def get_snippets(db: Annotated[AsyncSession, Depends(get_db)]):
-    result = await db.execute(select(models.Snippet))
+    result = await db.execute(
+        select(models.Snippet).options(selectinload(models.Snippet.owner))
+    )
     snippets = result.scalars().all()
     return snippets
 
@@ -88,24 +95,24 @@ async def update_snippet_full(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Snippet not found",
         )
-    # If the updated snippet has a different owner, then check to make sure the new owner exists
-    if updated_snippet.owner_id != snippet_to_update.owner_id:
-        result = await db.execute(
-            select(models.User.id).where(models.User.id == updated_snippet.owner_id)
+
+    # If the updated owner doesn't exist, then error
+    result = await db.execute(
+        select(models.User.id).where(models.User.id == updated_snippet.owner_id)
+    )
+    user = result.scalars().first()
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found",
         )
-        user = result.scalars().first()
-        if not user:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="User not found",
-            )
     snippet_to_update.title = updated_snippet.title
     snippet_to_update.language = updated_snippet.language
     snippet_to_update.description = updated_snippet.description
     snippet_to_update.code = updated_snippet.code
     snippet_to_update.owner_id = updated_snippet.owner_id
     await db.commit()
-    await db.refresh(snippet_to_update)
+    await db.refresh(snippet_to_update, attribute_names=["owner"])
     return snippet_to_update
 
 
@@ -126,7 +133,10 @@ async def update_snippet_partial(
             detail="Snippet not found",
         )
     # If the updated snippet has a different owner, then check to make sure the new owner exists
-    if updated_snippet.owner_id != snippet_to_update.owner_id:
+    if (
+        updated_snippet.owner_id is not None
+        and updated_snippet.owner_id != snippet_to_update.owner_id
+    ):
         result = await db.execute(
             select(models.User.id).where(models.User.id == updated_snippet.owner_id)
         )
@@ -139,7 +149,7 @@ async def update_snippet_partial(
     for key, val in updated_snippet.model_dump(exclude_unset=True).items():
         setattr(snippet_to_update, key, val)
     await db.commit()
-    await db.refresh(snippet_to_update)
+    await db.refresh(snippet_to_update, attribute_names=["owner"])
     return snippet_to_update
 
 

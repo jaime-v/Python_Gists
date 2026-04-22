@@ -2,6 +2,19 @@
 
 Log of what I've done for this project
 
+## April 21, 2026
+Added a few extra pieces to the routes, supposedly for eager loading when we need to access
+the relationship in the table and put it into our response
+Imported exception handlers, should probably make an exception handler function like Corey
+Need greenlet for SQLAlchemy's async mode
+Switched to psycopg3 instead of psycopg2 because of async
+Modified routes to use eager loading to work with async
+
+Backend is back up and running again!
+fixed an issue where user can be updated with an invalid email string (schema issue)
+All CRUD seems to work
+Authentication seems to work
+
 ## April 20, 2026
 Authentication uses pwdlib[argon2], pyjwt, and pydantic-settings
 Added in Authentication so user's get a json web token

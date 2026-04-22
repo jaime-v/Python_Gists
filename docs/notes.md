@@ -94,11 +94,37 @@ alembic/env.py - import models, settings, Base (in that order)
 Need to make sure that our models are registered in Base metadata, otherwise Alembic won't see it
 Set database url, and target metadata
 
+im not sure what selectinload does, but Corey does it with routes for rendering
+Apparently it's necessary for routes that normally use lazy loading, meaning that we need
+to explicitly load something if we want to use it (eager loading)
+Lazy loading requires running a synchronous query in an async context, so need eager loading
+if we want to use async and want to access relationships in the database
+Again, this is just used in the server side rendering routes in the tutorial
+attribute_names=["rel"] in the db.refresh() is important for eager loading as well when 
+refreshing the database
+
+greenlet for async with sqlalchemy
+
 ## Structure things
 I think how it works is we run from whatever directory .venv is in
 Or maybe it's the root directory
 But either way, we need to access modules via app.<module> and we can access
     things that are inside the root backend directory with just the name, like config
+
+## Async vs Sync
+normal def functions are spawned in a separate thread pool apparently, so it doesn't block
+the main thread
+async functions are run on the main event loop, so it's somehow more efficient and requires us to
+await for I/O
+
+so async should be done with things that require I/O, like database reading and similar
+
+Apparently psycopg2 doesn't support async and I should use asyncpg instead
+I'm going to use psycopg 3 because it's what Corey uses in the tutorial and apparently it's
+good for both async and sync development
+
+## FastAPI Router
+Can put prefixes inside main rather than the router, I like the prefix inside the router though
 
 ## Misc
 
@@ -124,6 +150,15 @@ But that's kind of cringe honestly -- manually running things -_-
 example auth is:
 johndoe
 secret
+
+string
+user@example.com
+string
+
+janedoe
+janedoe@gmail.com
+password
+
 
 ### For later projects
 Later projects should use the new stuff:

@@ -71,7 +71,7 @@ async def create_user(user: UserCreate, db: Annotated[AsyncSession, Depends(get_
     return new_user
 
 
-@router.get("/token", response_model=Token)
+@router.post("/token", response_model=Token)
 async def login_for_access_token(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
     db: Annotated[AsyncSession, Depends(get_db)],
@@ -164,7 +164,16 @@ async def get_user_snippets(user_id: int, db: Annotated[AsyncSession, Depends(ge
             detail="User not found",
         )
     result = await db.execute(
-        select(models.Snippet).where(models.Snippet.owner_id == user_id)
+        # Select from snippets table where the owner id of that snippet matches the
+        # requested user id
+        # select(models.Snippet).where(models.Snippet.owner_id == user_id)
+        # Need to test these two, above is what I think works and below is the Corey tutorial
+        # Supposedly it's because the response requires the owner object, not just the id
+        # Select from snippets table, load in the owners of each snippet where
+        # the owner's id matches the requested user id
+        select(models.Snippet)
+        .options(selectinload(models.Snippet.owner))
+        .where(models.Snippet.owner_id == user_id)
     )
     snippets = result.scalars().all()
     return snippets

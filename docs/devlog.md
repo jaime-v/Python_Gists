@@ -2,6 +2,11 @@
 
 Log of what I've done for this project
 
+## April 23, 2026
+Added authorization with CurrentUser and put it into various routes that require protection
+Fixed the snippet delete route (idk how I didn't see it)
+Tested all routes, looks good
+
 ## April 21, 2026
 Added a few extra pieces to the routes, supposedly for eager loading when we need to access
 the relationship in the table and put it into our response

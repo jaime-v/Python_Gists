@@ -58,8 +58,12 @@ class SnippetBase(BaseModel):
 
 
 # Schema for creating a snippet
+# Only want the logged in user to be able to create
+# So we need to get the user id from the token instead of the request body
+# Since we no longer pass the user id from the body, users cannot impersonate other users
 class SnippetCreate(SnippetBase):
-    owner_id: int
+    # owner_id: int
+    pass
 
 
 # Schema for a created snippet -- inherits from SnippetCreate because we want to
@@ -81,7 +85,7 @@ class SnippetUpdate(BaseModel):
     language: str | None = Field(default=None)
     description: str | None = Field(default=None)
     code: str | None = Field(default=None)
-    owner_id: int | None = Field(default=None)
+    # owner_id: int | None = Field(default=None)
 
 
 class Token(BaseModel):

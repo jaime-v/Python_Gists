@@ -68,6 +68,10 @@ All 3 parts of base64 encoded and separated by dots
 
 Not using .env directly because pydantic-settings is supposedly better
 
+401 means not authenticated
+403 means authenticated, but cannot take an action
+It's the difference between "you need to log in" and "you don't have the authorization to do this"
+
 ## Database things
 Importing Base (declarative base) into other modules doesn't seem to work,
 either because of creating multiple bases, or by calling without all models
@@ -126,6 +130,11 @@ good for both async and sync development
 ## FastAPI Router
 Can put prefixes inside main rather than the router, I like the prefix inside the router though
 
+## Pagination
+Useful for scaling, we can use query parameters for skip and limit, so we don't load all
+of the data at once
+Will probably add this later on
+
 ## Misc
 
 Annotated is for type safe dependencies
@@ -155,9 +164,10 @@ string
 user@example.com
 string
 
-janedoe
-janedoe@gmail.com
-password
+-- Deleted now
+janedoe -> test update current user
+janedoe@gmail.com -> new@user.com
+password -> help
 
 
 ### For later projects

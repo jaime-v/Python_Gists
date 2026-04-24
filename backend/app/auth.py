@@ -11,6 +11,14 @@ from pwdlib import PasswordHash
 from config import settings
 import jwt
 
+# Need some more imports
+from typing import Annotated
+from fastapi import status, HTTPException, Depends
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+import app.models as models
+from app.db import get_db
+
 # Just uses recommended security configuration in the password hasher
 password_hash = PasswordHash.recommended()
 
@@ -67,3 +75,62 @@ def verify_access_token(token: str):
         return None
     else:
         return payload.get("sub")
+
+
+# Need a reusable dependency that can look up the user in the database and return the
+# user object
+# This is different from /me, which is an endpoint that the user can call for
+# We need a dependency that we use internally so that routes can require authentication
+
+"""
+Any route that users this dependency will automatically require a valid token, and
+receive a valid user object
+
+Takes a token from the oauth2 authorization scheme we have set
+Also takes a database session
+
+Verify the access token, raise a 401-unauthorized if invalid
+Try to convert the token to an int, raise a 401-unauthorized if token has type or value error
+    (which means it has been tampered with i think)
+Find the user in the database
+If user does not exist, then return a 401? With user not found? Idk why it's not 404
+Then return user
+
+This is just the /me function though, so we replaced that route
+"""
+
+
+async def get_current_user(
+    token: Annotated[str, Depends(oauth2_scheme)],
+    db: Annotated[AsyncSession, Depends(get_db)],
+) -> models.User:
+    user_id = verify_access_token(token)
+    if user_id is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid or Expired Token",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    try:
+        user_id_int = int(user_id)
+    except (TypeError, ValueError):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid or Expired Token",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    result = await db.execute(select(models.User).where(models.User.id == user_id_int))
+    user = result.scalars().first()
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="User not found",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    return user
+
+
+# To make things even easier, we make a type alias
+CurrentUser = Annotated[models.User, Depends(get_current_user)]

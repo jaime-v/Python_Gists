@@ -47,7 +47,7 @@ class UserPrivate(UserPublic):
 class UserUpdate(BaseModel):
     username: str | None = Field(default=None)
     email: EmailStr | None = Field(default=None)
-    plain_password: str | None = Field(default=None)
+    plain_password: str | None = Field(default=None, min_length=8)
 
 
 class SnippetBase(BaseModel):

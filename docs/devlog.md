@@ -2,6 +2,14 @@
 
 Log of what I've done for this project
 
+## April 24, 2026
+Started working with Alembic for database migrations
+The file is different from the example though because it expects an existing database
+Probably need to revisit in the future and start a fresh database so that the initial
+Alembic migration file will create the tables
+Currently works in the dev environment though, manual testing is clean
+Also adjusted UserUpdate schema to have min_length for password changes
+
 ## April 23, 2026
 Added authorization with CurrentUser and put it into various routes that require protection
 Fixed the snippet delete route (idk how I didn't see it)

@@ -70,7 +70,7 @@ Not using .env directly because pydantic-settings is supposedly better
 
 401 means not authenticated
 403 means authenticated, but cannot take an action
-It's the difference between "you need to log in" and "you don't have the authorization to do this"
+It's the difference between "you need to log in" and "you are not allowed to do this"
 
 ## Database things
 Importing Base (declarative base) into other modules doesn't seem to work,
@@ -85,6 +85,20 @@ So we need to have a migration system in place
 
 .scalars().first() returns either the first object or None if there are no matches
 
+im not sure what selectinload does, but Corey does it with routes for rendering
+Apparently it's necessary for routes that normally use lazy loading, meaning that we need
+to explicitly load something if we want to use it (eager loading)
+Lazy loading requires running a synchronous query in an async context, so need eager loading
+if we want to use async and want to access relationships in the database
+Again, this is just used in the server side rendering routes in the tutorial
+attribute_names=["rel"] in the db.refresh() is important for eager loading as well when 
+refreshing the database
+>Saw this error when testing routes before, we needed to load the User for snippets
+
+greenlet for async with sqlalchemy
+
+## Alembic
+
 We are going to use Alembic for database migrations, it basically works like a version control
 for the database
 Migrations will track schema changes over time, apply changes safely, think of each migration
@@ -96,18 +110,58 @@ alembic init -t async alembic (async template and the directory where migration 
 alembic.ini - remove database.url because we are setting it programmatically
 alembic/env.py - import models, settings, Base (in that order)
 Need to make sure that our models are registered in Base metadata, otherwise Alembic won't see it
-Set database url, and target metadata
+Also need to set database url, and target metadata
 
-im not sure what selectinload does, but Corey does it with routes for rendering
-Apparently it's necessary for routes that normally use lazy loading, meaning that we need
-to explicitly load something if we want to use it (eager loading)
-Lazy loading requires running a synchronous query in an async context, so need eager loading
-if we want to use async and want to access relationships in the database
-Again, this is just used in the server side rendering routes in the tutorial
-attribute_names=["rel"] in the db.refresh() is important for eager loading as well when 
-refreshing the database
+So i think the way this works is that Alembic generates migrations by comparing the current
+database to the models we give it. Alembic finds the changes, and generates the migration
+`alembic revision --autogenerate -m "message here (initial schema, whatever)"`
+This creates the migration file, but doesn't apply anything to the database yet
 
-greenlet for async with sqlalchemy
+Upgrade and Downgrade are for applying and reverting changes respectively
+
+The file looks a bit different because the database was already created...
+Might want to look into that because we wouldn't want to just alter the table, we would
+want to actually create it
+
+`alembic upgrade head`
+Will run the upgrade up to the latest version (head)
+
+`alembic current`
+Checks the current state of alembic
+
+`alembic downgrade -1`
+Goes back by one migration, in case you make mistakes
+
+`alembic history`
+Displays history
+
+When adding a new column to an existing table, we need to (or should, not necessarily need to)
+add a server_default value otherwise it will probably be set to NULL, which could cause issues
+`likes: Mapped[int] = mapped_column(Integer, default=0, server_default="0")`
+Note that server_default is a string
+
+Setting called "compare type" that we might want to add to alembic/env.py 
+In older version defaults, Alembic doesn't detect column type changes in autogenerate
+Supposedly it is True by default now
+
+When working with migration files, we don't want these on prod
+We generate them locally, commit them, then prod will just upgrade head
+
+### Blank migration file
+For some reason the tables didn't generate in the tutorial, so Corey goes over what to do
+Apparently it's because he was running the app before removing create_all, so there was
+nothing to change
+I'll write notes on this in case I need it
+
+Drop everything from existing database, every database has a default schema called public, which
+is where all tables go unless otherwise specified
+dropping and recreating it will effectively recreate the database without having to delete the
+entire database -- the quickest way to wipe all the tables from an sql database
+`psql -U <user> -d <database> -c 'DROP SCHEMA public cascade; CREATE SCHEMA public;'`
+
+Delete the empty migration file and the pycache file
+Rerun the migration file creation
+
 
 ## Structure things
 I think how it works is we run from whatever directory .venv is in
@@ -133,7 +187,7 @@ Can put prefixes inside main rather than the router, I like the prefix inside th
 ## Pagination
 Useful for scaling, we can use query parameters for skip and limit, so we don't load all
 of the data at once
-Will probably add this later on
+Will probably add this later on, better to do it manually for learning
 
 ## Misc
 
@@ -168,6 +222,12 @@ string
 janedoe -> test update current user
 janedoe@gmail.com -> new@user.com
 password -> help
+
+test with alembic -> test update current user
+test@gmail.com -> new@user.com
+testpass
+
+
 
 
 ### For later projects

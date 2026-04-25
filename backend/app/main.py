@@ -18,17 +18,23 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.routers import users, snippets
 from app.middleware import timing
-from app.db import engine, get_db, Base
+from app.db import engine, get_db
 
 
 # Lifespan handles on startup and on shutdown events
+# @asynccontextmanager
+# async def lifespan(_app: FastAPI):
+#     # Startup
+#     async with engine.begin() as conn:
+#         await conn.run_sync(Base.metadata.create_all)
+#     yield
+#     # Shutdown
+#     await engine.dispose()
+
+# Working with Alembic
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
-    # Startup
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
     yield
-    # Shutdown
     await engine.dispose()
 
 

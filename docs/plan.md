@@ -26,16 +26,19 @@ useful to learn and improve the app
 
 
 # TODO:
-Thinking about making things more modern, like using Mapped[type] and mapped_column
-But I think I'll just roll with my own stuff for now and then do the rest of it later
-if I really need to
+Wipe database and use Alembic to generate creation migration file
+Test Backend
+Start working on frontend
+Connect Backend and Frontend
+Test Frontend
+e2e Tests
+CI/CD
+Docker
+Deploy
+Done??
 
-
-- Authentication with JWT
-- Authorization so user's can only perform their own operations
-- Snippets cannot be created unless there is an owner (and other validation things)
-- Async Database
-- Modernized things
-
-Need to test everything once it gets running because I think that is it for the backend
-
+## Additional features to add
+Profile pictures with AWS S3 Object Storage (Corey tutorial)
+Transfer ownership of snippets
+Password management (Corey tutorial)
+Refactor?

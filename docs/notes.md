@@ -3,10 +3,10 @@
 Used for things that I'm doing, things that I should know, and things I will
 hopefully memorize in the future
 
-References:  
-Traversy Media FastAPI crash course  
-Devsheets.io/sheets/fastapi  
-FastAPI Docs  
+References:
+Traversy Media FastAPI crash course
+Devsheets.io/sheets/fastapi
+FastAPI Docs
 Corey Schafer FastAPI Tutorial Playlist
 
 ## Setup
@@ -28,7 +28,7 @@ devsheets recommendation for all (using this)
 DB stuff
 `pip install sqlalchemy psycopg2-binary`
 
-.env 
+.env
 `pip install python-dotenv`
 
 Password hashing -- not working :/ (Not using this because it's old and bald)
@@ -41,6 +41,7 @@ Create requirements.txt file
 `pip freeze > requirements.txt`
 
 ### Run
+
 `uvicorn main:app --reload`
 `fastapi dev main.py`
 Then go to localhost:8000 and/or localhost:8000/docs
@@ -51,7 +52,9 @@ If one of them is global or something (uvicorn) then you need to run `python -m 
 Or just reload the venv
 
 ### Git
+
 If many files are being tracked that we don't want to be tracked, run this:
+
 ```
 git rm -r --cached .
 git add .
@@ -59,12 +62,14 @@ git commit -m "message"
 ```
 
 ## Security things
+
 JSON Web Tokens and Argon2 for security
 JSON Web Tokens contain
+
 - a header with algorithm and type
 - a payload with data and expiration
 - a signature, proving that the token wasn't tampered with
-All 3 parts of base64 encoded and separated by dots
+  All 3 parts of base64 encoded and separated by dots
 
 Not using .env directly because pydantic-settings is supposedly better
 
@@ -73,6 +78,7 @@ Not using .env directly because pydantic-settings is supposedly better
 It's the difference between "you need to log in" and "you are not allowed to do this"
 
 ## Database things
+
 Importing Base (declarative base) into other modules doesn't seem to work,
 either because of creating multiple bases, or by calling without all models
 Fix is to make the main.py file call an init function that is in db.py
@@ -91,9 +97,10 @@ to explicitly load something if we want to use it (eager loading)
 Lazy loading requires running a synchronous query in an async context, so need eager loading
 if we want to use async and want to access relationships in the database
 Again, this is just used in the server side rendering routes in the tutorial
-attribute_names=["rel"] in the db.refresh() is important for eager loading as well when 
+attribute_names=["rel"] in the db.refresh() is important for eager loading as well when
 refreshing the database
->Saw this error when testing routes before, we needed to load the User for snippets
+
+> Saw this error when testing routes before, we needed to load the User for snippets
 
 greenlet for async with sqlalchemy
 
@@ -114,16 +121,20 @@ Also need to set database url, and target metadata
 
 So i think the way this works is that Alembic generates migrations by comparing the current
 database to the models we give it. Alembic finds the changes, and generates the migration
+
 `alembic revision --autogenerate -m "message here (initial schema, whatever)"`
+
 This creates the migration file, but doesn't apply anything to the database yet
 
 Upgrade and Downgrade are for applying and reverting changes respectively
 
 The file looks a bit different because the database was already created...
+
 Might want to look into that because we wouldn't want to just alter the table, we would
 want to actually create it
 
 `alembic upgrade head`
+
 Will run the upgrade up to the latest version (head)
 
 `alembic current`
@@ -137,10 +148,12 @@ Displays history
 
 When adding a new column to an existing table, we need to (or should, not necessarily need to)
 add a server_default value otherwise it will probably be set to NULL, which could cause issues
+
 `likes: Mapped[int] = mapped_column(Integer, default=0, server_default="0")`
+
 Note that server_default is a string
 
-Setting called "compare type" that we might want to add to alembic/env.py 
+Setting called "compare type" that we might want to add to alembic/env.py
 In older version defaults, Alembic doesn't detect column type changes in autogenerate
 Supposedly it is True by default now
 
@@ -148,46 +161,79 @@ When working with migration files, we don't want these on prod
 We generate them locally, commit them, then prod will just upgrade head
 
 ### Blank migration file
+
 For some reason the tables didn't generate in the tutorial, so Corey goes over what to do
 Apparently it's because he was running the app before removing create_all, so there was
 nothing to change
+
 I'll write notes on this in case I need it
 
 Drop everything from existing database, every database has a default schema called public, which
 is where all tables go unless otherwise specified
+
 dropping and recreating it will effectively recreate the database without having to delete the
 entire database -- the quickest way to wipe all the tables from an sql database
+
 `psql -U <user> -d <database> -c 'DROP SCHEMA public cascade; CREATE SCHEMA public;'`
 
 Delete the empty migration file and the pycache file
 Rerun the migration file creation
 
-
 ## Structure things
+
 I think how it works is we run from whatever directory .venv is in
-Or maybe it's the root directory
+or maybe it's the root directory
+
 But either way, we need to access modules via app.<module> and we can access
-    things that are inside the root backend directory with just the name, like config
+things that are inside the root backend directory with just the name, like config
 
 ## Async vs Sync
+
 normal def functions are spawned in a separate thread pool apparently, so it doesn't block
 the main thread
+
 async functions are run on the main event loop, so it's somehow more efficient and requires us to
 await for I/O
 
 so async should be done with things that require I/O, like database reading and similar
 
 Apparently psycopg2 doesn't support async and I should use asyncpg instead
+
 I'm going to use psycopg 3 because it's what Corey uses in the tutorial and apparently it's
 good for both async and sync development
 
 ## FastAPI Router
+
 Can put prefixes inside main rather than the router, I like the prefix inside the router though
 
 ## Pagination
+
 Useful for scaling, we can use query parameters for skip and limit, so we don't load all
 of the data at once
+
 Will probably add this later on, better to do it manually for learning
+
+## AWS S3
+
+Use boto3 for development with AWS
+
+Lots of copy/paste, but the gist of it is that we need to make async wrappers and just use S3
+configuration stuff that can be done by just clicking around on the website with the bucket
+
+## Testing
+
+We only need these in development, so install as dev depenedencies
+
+- Pytest for testing Python
+- Moto[s3] for testing S3
+
+Corey does a lot of config and copy/paste here
+Pytest -s and -v flags are good
+
+## Deployment
+
+There's a lot of info in the Corey videos on deploying, super useful to know about security
+Neon for creating the database and connecting
 
 ## Misc
 
@@ -195,43 +241,27 @@ Annotated is for type safe dependencies
 `func (db: Annotated[Session, Depends(get_db)]):`
 Before running the function, call get_db and pass it in as the db parameter
 
-URLs are like:  
-http://localhost:<port>/?query=query_val#fragment  
+URLs are like:
 
-Maybe try uv instead of pip in the future  
+> http://localhost:<port>/?query=query_val#fragment
 
-If moving venv, need to re-copy -- something is wrong if you just try to move it  
+Maybe try uv instead of pip in the future
 
-File structure generally has config stuff in the root folder  
+If moving venv, need to re-copy -- something is wrong if you just try to move it
 
-Need to make backend/ a python package so that we can run uvicorn from root  
-Need to make app/ a package so that imports can go through for other files  
+File structure generally has config stuff in the root folder
+
+Need to make backend/ a python package so that we can run uvicorn from root
+
+Need to make app/ a package so that imports can go through for other files
 
 For formatting, just running `:!black %` in neovim for now
-But that's kind of cringe honestly -- manually running things -_-
 
-example auth is:
-johndoe
-secret
-
-string
-user@example.com
-string
-
--- Deleted now
-janedoe -> test update current user
-janedoe@gmail.com -> new@user.com
-password -> help
-
-test with alembic -> test update current user
-test@gmail.com -> new@user.com
-testpass
-
-
-
+But that's kind of cringe honestly -- manually running things -\_-
 
 ### For later projects
-Later projects should use the new stuff:
-Migrate to postgresql 18, "psycopg[binary]" instead of psycopg2-binary
-Also use uv instead of pip
-Bunch of other stuff
+
+- Later projects should use the new stuff:
+- Migrate to postgresql 18, "psycopg[binary]" instead of psycopg2-binary
+- Also use uv instead of pip
+- Bunch of other stuff

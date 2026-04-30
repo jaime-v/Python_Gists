@@ -1,6 +1,6 @@
 import "./App.css";
 
-/*
+/**
 Components of the frontend will be:
 Header (NavBar, Website Title, Logged in User, Login/Sign out Button)
 Main (Varies depending on page)
@@ -29,8 +29,9 @@ Anything that interacts with backend service, creating data for backend service,
 Qs:
 How to fetch from my own backend?
 How to manage login?
+ *
+ */
 
-*/
 import {
   LoginPage,
   SnippetCreationPage,
@@ -40,6 +41,9 @@ import {
   UserPublicProfilePage,
 } from "@pages";
 import type { UserPrivate, Snippet } from "@models";
+import { Footer, Header } from "@components";
+import useFetchSnippets from "@hooks/useFetchSnippets";
+import { SnippetsContext } from "@context/SnippetsContext";
 
 const user1: UserPrivate = {
   username: "johndoe",
@@ -76,43 +80,36 @@ const data: Snippet[] = [
     last_updated_date: new Date(),
   },
 ];
-function Header() {
-  return (
-    <header>
-      <h1>Code Snippets App Thing</h1>
-    </header>
-  );
-}
-
-function Footer() {
-  return (
-    <footer>
-      <h2>
-        Full-Stack App with React TypeScript Frontend, FastAPI Python Backend,
-        PostgreSQL Database
-      </h2>
-    </footer>
-  );
-}
 
 function App() {
+  const { snippets, setSnippets, loading, setLoading } = useFetchSnippets();
   return (
     <>
-      <Header />
-      <hr />
-      <LoginPage />
-      <hr />
-      <SnippetCreationPage />
-      <hr />
-      <SnippetsPage data={data} />
-      <hr />
-      <SnippetDetailsPage snippet={data[0]} />
-      <hr />
-      <UserPrivateProfilePage user={user1}></UserPrivateProfilePage>
-      <hr />
-      <UserPublicProfilePage user={user2}></UserPublicProfilePage>
-      <hr />
-      <Footer />
+      <SnippetsContext.Provider
+        value={{ snippets, setSnippets, loading, setLoading }}
+      >
+        <Header />
+        <hr />
+        <LoginPage />
+        <hr />
+        <SnippetCreationPage />
+        <hr />
+        <SnippetsPage data={data} />
+        <hr />
+        <SnippetDetailsPage snippet={data[0]} />
+        <hr />
+        <UserPrivateProfilePage user={user1}></UserPrivateProfilePage>
+        <hr />
+        <UserPublicProfilePage user={user2}></UserPublicProfilePage>
+        <hr />
+        <h1>APP STUFF</h1>
+        <ul>
+          {snippets.map((snippet) => {
+            return <li key={snippet.id}>{snippet.title}</li>;
+          })}
+        </ul>
+        <Footer />
+      </SnippetsContext.Provider>
     </>
   );
 }

@@ -17,3 +17,12 @@ export type Snippet = SnippetBase & {
 
 // Separate type for SnippetCreate, but nothing here for now since it's basically the same as the base
 export type SnippetCreate = SnippetBase & {};
+
+// Snippets context, we need to pass snippets around and have the ability to modify it
+// Also need to manage a loading state when we are fetching
+export type SnippetsContextType = {
+  snippets: Snippet[];
+  setSnippets: React.Dispatch<React.SetStateAction<Snippet[]>>;
+  loading: boolean;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+};

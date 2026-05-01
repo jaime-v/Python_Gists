@@ -31,7 +31,6 @@ class UserCreate(UserBase):
 class UserPublic(BaseModel):
     # Modern version of class Config
     model_config = ConfigDict(from_attributes=True)
-    id: int
     username: str
 
     # Allows reading from SQLAlchemy objects
@@ -40,6 +39,7 @@ class UserPublic(BaseModel):
 
 
 class UserPrivate(UserPublic):
+    id: int
     email: EmailStr
 
 

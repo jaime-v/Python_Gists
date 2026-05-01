@@ -2,6 +2,21 @@
 
 Log of what I've done for this project
 
+## April 30, 2026
+Trying to figure out how to use Outlet and different routes and such
+
+Updated Database Snippet model to have unique titles
+
+Wondering how to work with logged in users, displaying different snippets, finding things using
+snippet id, title, users by username, id, etc.
+
+Created basic Snippets display page with useReducer for filtering
+
+Probably need context/hooks for users and authentication so we can check user profiles and if 
+a user is logged in
+
+Context is not contexting to other pages for some reason...
+
 ## April 29, 2026
 
 Created a basic frontend structure with hardcoded data, pages, and basic components
@@ -10,6 +25,8 @@ A bit confused as to how to display the different pages because I want the logge
 to see different actions for their own snippet and profile
 
 Edited devlog and notes formatting so I can actually read it
+
+Did a basic API fetch from frontend, created context, custom hook, and more stuff for various components
 
 ## April 27, 2026
 

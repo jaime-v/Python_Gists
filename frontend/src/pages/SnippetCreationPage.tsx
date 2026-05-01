@@ -1,8 +1,8 @@
-/*
-SnippetCreationPage.tsx
-
-Page for creating a snippet
-*/
+/**
+ * SnippetCreationPage.tsx
+ *
+ * Page for creating a snippet
+ */
 import { Button, Form } from "react-bootstrap";
 function SnippetCreationPage() {
   return (

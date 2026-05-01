@@ -45,7 +45,7 @@ class Snippet(Base):
     __tablename__ = "snippets"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
-    title: Mapped[str] = mapped_column(String(50), index=True)
+    title: Mapped[str] = mapped_column(String(50), unique=True, index=True)
     language: Mapped[str] = mapped_column(String(50))
     description: Mapped[str] = mapped_column(String(500))
     code: Mapped[str] = mapped_column(String(500))

@@ -265,3 +265,22 @@ But that's kind of cringe honestly -- manually running things -\_-
 - Migrate to postgresql 18, "psycopg[binary]" instead of psycopg2-binary
 - Also use uv instead of pip
 - Bunch of other stuff
+
+testuser
+user@example.com
+testpass1
+id == 2
+
+## React Stuff
+Context is like having an object or set of values taht can be passed around the app, without 
+needing to prop drill. We are basically wrapping a section of the application with values 
+and we can get those values with useContext()
+
+Custom Hooks are reusable pieces of logic in the application
+
+useReducer is cool
+
+Really it's just a bunch of notes in the form of comments, maybe I should move those here
+
+## Frontend and Backend
+Should I be sending user id in UserPublic responses? probably not

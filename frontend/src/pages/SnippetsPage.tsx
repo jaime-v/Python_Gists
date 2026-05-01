@@ -1,65 +1,50 @@
-/*
-SnippetsPage.tsx
+/**
+ * SnippetsPage.tsx
+ *
+ * Page responsible for displaying all snippet previews, searching/filtering/sorting them, and possibly going to
+ * a snippet's details page
+ */
 
-Page for displaying all snippets
-*/
-import type { Snippet } from "@models";
-import { Accordion, Button, Card } from "react-bootstrap";
+import { SnippetsHeader, SnippetsMain } from "@components";
+import { useReducer } from "react";
+import type { DisplayOptionsState, DisplayOptionsAction } from "@models";
 
-function MainCards({ data }: { data: Snippet[] }) {
-  return (
-    <main>
-      {data.map((snippet) => {
-        return <SnippetCard key={snippet.id} snippet={snippet} />;
-      })}
-    </main>
-  );
-}
-function MainListing({ data }: { data: Snippet[] }) {
-  return (
-    <main>
-      <Accordion>
-        {data.map((snippet) => {
-          return <SnippetListing key={snippet.id} snippet={snippet} />;
-        })}
-      </Accordion>
-    </main>
-  );
-}
+const initialDisplayState: DisplayOptionsState = {
+  searchFilter: "",
+  languageFilter: "All",
+  sortOption: "Newest",
+  displayOption: "grid",
+};
 
-function SnippetCard({ snippet }: { snippet: Snippet }) {
-  return (
-    <Card>
-      <Card.Body>
-        <Card.Title>{snippet.title}</Card.Title>
-        <Card.Text>{snippet.description}</Card.Text>
-      </Card.Body>
-      <Card.Footer>
-        <Button variant="success">More Details</Button>
-      </Card.Footer>
-    </Card>
-  );
+function displayReducer(
+  state: DisplayOptionsState,
+  action: DisplayOptionsAction,
+) {
+  // I feel like this is inefficient
+  const { type, payload } = action;
+  switch (type) {
+    case "SET_SEARCH":
+      return { ...state, searchFilter: payload };
+    case "SET_LANGUAGE":
+      return { ...state, languageFilter: payload };
+    case "SET_SORT":
+      return { ...state, sortOption: payload };
+    case "SET_DISPLAY":
+      return { ...state, displayOption: payload };
+    default:
+      return state;
+  }
 }
 
-function SnippetListing({ snippet }: { snippet: Snippet }) {
-  return (
-    <Accordion.Item eventKey={snippet.id.toString()}>
-      <Accordion.Header>{snippet.title}</Accordion.Header>
-      <Accordion.Body>
-        {snippet.description}
-        <br />
-        <Button variant="success">More Details</Button>
-      </Accordion.Body>
-    </Accordion.Item>
+function SnippetsPage() {
+  const [displayState, displayDispatch] = useReducer(
+    displayReducer,
+    initialDisplayState,
   );
-}
-
-function SnippetsPage({ data }: { data: Snippet[] }) {
   return (
     <>
-      <h1>Snippets Page</h1>
-      <MainCards data={data} />
-      <MainListing data={data} />
+      <SnippetsHeader displayDispatch={displayDispatch} />
+      <SnippetsMain displayState={displayState} />
     </>
   );
 }

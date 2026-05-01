@@ -1,5 +1,3 @@
-import "./App.css";
-
 /**
 Components of the frontend will be:
 Header (NavBar, Website Title, Logged in User, Login/Sign out Button)
@@ -31,55 +29,66 @@ How to fetch from my own backend?
 How to manage login?
  *
  */
+import "./App.css";
 
 import {
   LoginPage,
   SnippetCreationPage,
   SnippetsPage,
   SnippetDetailsPage,
-  UserPrivateProfilePage,
-  UserPublicProfilePage,
+  HomePage,
+  UserPage,
 } from "@pages";
-import type { UserPrivate, Snippet } from "@models";
 import { Footer, Header } from "@components";
 import useFetchSnippets from "@hooks/useFetchSnippets";
 import { SnippetsContext } from "@context/SnippetsContext";
+import { Outlet, Route, Routes } from "react-router-dom";
 
-const user1: UserPrivate = {
-  username: "johndoe",
-  email: "johndoe@gmail.com",
-  id: 1,
-};
+// const user1: UserPrivate = {
+//   username: "johndoe",
+//   email: "johndoe@gmail.com",
+//   id: 1,
+// };
 
-const user2: UserPrivate = {
-  username: "janedoe",
-  email: "janedoe@gmail.com",
-  id: 2,
-};
+// const user2: UserPrivate = {
+//   username: "janedoe",
+//   email: "janedoe@gmail.com",
+//   id: 2,
+// };
 
 // Just some hardcoded data for snippets
-const data: Snippet[] = [
-  {
-    title: "First snippet (hardcoded)",
-    language: "Python",
-    description: "The first snippet, but it's hardcoded",
-    code: "print('hello world!')",
-    id: 1,
-    owner: user1,
-    creation_date: new Date(),
-    last_updated_date: new Date(),
-  },
-  {
-    title: "Second snippet (hardcoded)",
-    language: "C++",
-    description: "The first snippet, but it's hardcoded",
-    code: 'std::cout << "sup" << std::endl;',
-    id: 2,
-    owner: user2,
-    creation_date: new Date(),
-    last_updated_date: new Date(),
-  },
-];
+// const data: Snippet[] = [
+//   {
+//     title: "First snippet (hardcoded)",
+//     language: "Python",
+//     description: "The first snippet, but it's hardcoded",
+//     code: "print('hello world!')",
+//     id: 1,
+//     owner: user1,
+//     creation_date: new Date(),
+//     last_updated_date: new Date(),
+//   },
+//   {
+//     title: "Second snippet (hardcoded)",
+//     language: "C++",
+//     description: "The first snippet, but it's hardcoded",
+//     code: 'std::cout << "sup" << std::endl;',
+//     id: 2,
+//     owner: user2,
+//     creation_date: new Date(),
+//     last_updated_date: new Date(),
+//   },
+// ];
+
+function Layout() {
+  return (
+    <>
+      <Header />
+      <Outlet />
+      <Footer />
+    </>
+  );
+}
 
 function App() {
   const { snippets, setSnippets, loading, setLoading } = useFetchSnippets();
@@ -88,19 +97,22 @@ function App() {
       <SnippetsContext.Provider
         value={{ snippets, setSnippets, loading, setLoading }}
       >
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<HomePage />} />
+            <Route path="snippets" element={<SnippetsPage />} />
+            <Route path="snippet/:title" element={<SnippetDetailsPage />} />
+            <Route path="create" element={<SnippetCreationPage />} />
+            <Route path="login" element={<LoginPage />} />
+            <Route path="user/:username" element={<UserPage />} />
+          </Route>
+        </Routes>
+        {/*
         <Header />
         <hr />
         <LoginPage />
         <hr />
         <SnippetCreationPage />
-        <hr />
-        <SnippetsPage data={data} />
-        <hr />
-        <SnippetDetailsPage snippet={data[0]} />
-        <hr />
-        <UserPrivateProfilePage user={user1}></UserPrivateProfilePage>
-        <hr />
-        <UserPublicProfilePage user={user2}></UserPublicProfilePage>
         <hr />
         <h1>APP STUFF</h1>
         <ul>
@@ -109,6 +121,8 @@ function App() {
           })}
         </ul>
         <Footer />
+
+        */}
       </SnippetsContext.Provider>
     </>
   );

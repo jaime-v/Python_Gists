@@ -1,11 +1,30 @@
-/*
-SnippetDetailsPage.tsx
-
-Page for displaying an entire snippet
-If the owner of the snippet is logged in, they can edit with modals at URL/edit/<section>
-*/
-import type { Snippet } from "@models";
-function SnippetDetailsPage({ snippet }: { snippet: Snippet }) {
+/**
+ * SnippetDetailsPage.tsx
+ *
+ * Page for displaying an entire snippet
+ * If the owner of the snippet is logged in, they can edit with modals at URL/edit/<section>
+ */
+import { SnippetsContext } from "@context/SnippetsContext";
+import { useContext } from "react";
+import { useParams } from "react-router-dom";
+function SnippetDetailsPage() {
+  const { title } = useParams();
+  if (!title) {
+    throw new Error("[SnippetDetails.tsx] - No params");
+  }
+  const context = useContext(SnippetsContext);
+  if (!context) {
+    throw new Error("[SnippetDetails.tsx] - Failed to get context");
+  }
+  const snippets = context.snippets;
+  const snippet = snippets.find((snippet) => {
+    return snippet.title.toLowerCase() === title.toLowerCase();
+  });
+  if (!snippet) {
+    throw new Error(
+      "[SnippetDetails.tsx] - Couldn't find snippet with given title",
+    );
+  }
   return (
     <>
       <h1>
@@ -14,8 +33,8 @@ function SnippetDetailsPage({ snippet }: { snippet: Snippet }) {
       <h2>{snippet.language}</h2>
       <h3>{snippet.description}</h3>
       <code>{snippet.code}</code>
-      <h4>Created: {snippet.creation_date.toLocaleString()}</h4>
-      <h4>Last Updated: {snippet.creation_date.toLocaleString()}</h4>
+      <h4>Created: {snippet.creationDate.toLocaleString()}</h4>
+      <h4>Last Updated: {snippet.creationDate.toLocaleString()}</h4>
     </>
   );
 }

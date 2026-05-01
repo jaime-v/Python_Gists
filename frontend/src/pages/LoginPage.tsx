@@ -1,8 +1,8 @@
-/*
-LoginPage.tsx
-
-Page for logging in (if it wasn't obvious)
-*/
+/**
+ * LoginPage.tsx
+ *
+ * Page for logging in (if it wasn't obvious)\
+ */
 import { Button, Form } from "react-bootstrap";
 function LoginPage() {
   return (

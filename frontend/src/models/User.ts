@@ -3,7 +3,7 @@ type UserBase = {
   username: string;
 };
 
-// Type for displaying public user information
+// Type for displaying public user information -- can also be the response object
 export type UserPublic = UserBase & {};
 
 // Type for displaying all user information

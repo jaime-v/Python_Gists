@@ -1,5 +1,5 @@
 /**
- * Header.tsx
+ * components/Header/Header.tsx
  *
  * Header for the application
  */

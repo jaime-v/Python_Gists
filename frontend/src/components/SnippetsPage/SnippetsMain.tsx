@@ -1,5 +1,5 @@
 /**
- * SnippetsMain.tsx
+ * components/SnippetsPage/SnippetsMain.tsx
  *
  * Main component for the SnippetsPage, responsible for displaying snippets as cards or accordion items
  */
@@ -63,6 +63,8 @@ const SORT_CONFIG = {
   "Least Recently Updated": { key: "update", dir: 1 },
 };
 
+type SortConfigTypes = keyof typeof SORT_CONFIG;
+
 function SnippetsMain({ displayState }: { displayState: DisplayOptionsState }) {
   console.log(displayState);
   const context = useContext(SnippetsContext);
@@ -71,8 +73,7 @@ function SnippetsMain({ displayState }: { displayState: DisplayOptionsState }) {
   }
   const snippets = context.snippets;
 
-  const config =
-    SORT_CONFIG[displayState.sortOption as keyof typeof SORT_CONFIG];
+  const config = SORT_CONFIG[displayState.sortOption as SortConfigTypes];
   const data = snippets
     .filter((snippet) => {
       if (displayState.searchFilter === "") {

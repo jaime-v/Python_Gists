@@ -1,3 +1,9 @@
+/**
+ * models/Snippet.ts
+ *
+ * Types regarding snippets
+ */
+
 import type { UserPrivate } from "./User";
 // Base for Snippet Types
 type SnippetBase = {
@@ -17,6 +23,13 @@ export type Snippet = SnippetBase & {
 
 // Separate type for SnippetCreate, but nothing here for now since it's basically the same as the base
 export type SnippetCreate = SnippetBase & {};
+
+export type SnippetUpdate = {
+  title?: string;
+  language?: string;
+  description?: string;
+  code?: string;
+};
 
 // Snippets context, we need to pass snippets around and have the ability to modify it
 // Also need to manage a loading state when we are fetching

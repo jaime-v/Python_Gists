@@ -1,5 +1,5 @@
 /**
- * UserPrivateProfile.tsx
+ * components/UserPage/UserPrivateProfile.tsx
  *
  * Component for displaying a user profile that is logged in
  * Edits can be made with a modal using URL/edit/<section>

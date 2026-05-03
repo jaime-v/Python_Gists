@@ -1,5 +1,5 @@
 /**
- * SnippetsHeader.tsx
+ * components/SnippetsPage/SnippetsHeader.tsx
  *
  * Header for the SnippetsPage
  *

@@ -1,5 +1,5 @@
 /**
- * SnippetsContext.tsx
+ * context/SnippetsContext.tsx
  *
  * Context for snippets so we can pass it around the app without prop drilling
  */

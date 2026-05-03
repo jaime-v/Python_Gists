@@ -282,5 +282,18 @@ useReducer is cool
 
 Really it's just a bunch of notes in the form of comments, maybe I should move those here
 
+## TypeScript
+keyof typeof is used for extracting keys of an object
+
+`<string> as keyof type of <object>`
+
+Although, it uses the as keyword, so i'm not sure how good it actually is
+
+Used a discriminated union in the display options reducer, it's not necessary after cleaning it
+up a bit, but it seems good to use. Just in general, I can probably just useState with a single
+object, but I haven't used useReducer so I thought I would do it
+
+
+
 ## Frontend and Backend
 Should I be sending user id in UserPublic responses? probably not

@@ -40,45 +40,10 @@ import {
   UserPage,
 } from "@pages";
 import { Footer, Header } from "@components";
-import useFetchSnippets from "@hooks/useFetchSnippets";
+import useInitSnippets from "@hooks/useInitSnippets";
 import { SnippetsContext } from "@context/SnippetsContext";
 import { Outlet, Route, Routes } from "react-router-dom";
-
-// const user1: UserPrivate = {
-//   username: "johndoe",
-//   email: "johndoe@gmail.com",
-//   id: 1,
-// };
-
-// const user2: UserPrivate = {
-//   username: "janedoe",
-//   email: "janedoe@gmail.com",
-//   id: 2,
-// };
-
-// Just some hardcoded data for snippets
-// const data: Snippet[] = [
-//   {
-//     title: "First snippet (hardcoded)",
-//     language: "Python",
-//     description: "The first snippet, but it's hardcoded",
-//     code: "print('hello world!')",
-//     id: 1,
-//     owner: user1,
-//     creation_date: new Date(),
-//     last_updated_date: new Date(),
-//   },
-//   {
-//     title: "Second snippet (hardcoded)",
-//     language: "C++",
-//     description: "The first snippet, but it's hardcoded",
-//     code: 'std::cout << "sup" << std::endl;',
-//     id: 2,
-//     owner: user2,
-//     creation_date: new Date(),
-//     last_updated_date: new Date(),
-//   },
-// ];
+import { AuthContext } from "@context/AuthContext";
 
 function Layout() {
   return (
@@ -91,7 +56,7 @@ function Layout() {
 }
 
 function App() {
-  const { snippets, setSnippets, loading, setLoading } = useFetchSnippets();
+  const { snippets, setSnippets, loading, setLoading } = useInitSnippets();
   return (
     <>
       <SnippetsContext.Provider
@@ -107,22 +72,6 @@ function App() {
             <Route path="user/:username" element={<UserPage />} />
           </Route>
         </Routes>
-        {/*
-        <Header />
-        <hr />
-        <LoginPage />
-        <hr />
-        <SnippetCreationPage />
-        <hr />
-        <h1>APP STUFF</h1>
-        <ul>
-          {snippets.map((snippet) => {
-            return <li key={snippet.id}>{snippet.title}</li>;
-          })}
-        </ul>
-        <Footer />
-
-        */}
       </SnippetsContext.Provider>
     </>
   );

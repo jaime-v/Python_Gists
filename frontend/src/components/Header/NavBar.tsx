@@ -1,5 +1,5 @@
 /**
- * NavBar.tsx
+ * components/Header/NavBar.tsx
  *
  * NavBar for the app, goes to all main pages
  */

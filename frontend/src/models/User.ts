@@ -1,3 +1,11 @@
+/**
+ * models/User.ts
+ *
+ * Types regarding users
+ *
+ * Some of these seem really redundant though
+ */
+
 // Base for User types
 type UserBase = {
   username: string;
@@ -14,5 +22,18 @@ export type UserPrivate = UserPublic & {
 
 // Type for user creation
 export type UserCreate = UserBase & {
+  email: string;
+  plain_password: string;
+};
+
+export type UserUpdate = {
+  username?: string;
+  email?: string;
+  plain_password?: string;
+};
+
+// Type for user login
+export type UserLogin = {
+  email: string;
   plain_password: string;
 };

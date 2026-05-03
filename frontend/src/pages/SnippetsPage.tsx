@@ -1,5 +1,5 @@
 /**
- * SnippetsPage.tsx
+ * pages/SnippetsPage.tsx
  *
  * Page responsible for displaying all snippet previews, searching/filtering/sorting them, and possibly going to
  * a snippet's details page

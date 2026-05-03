@@ -1,8 +1,11 @@
 /**
- * SnippetDetailsPage.tsx
+ * pages/SnippetDetailsPage.tsx
  *
  * Page for displaying an entire snippet
+ *
  * If the owner of the snippet is logged in, they can edit with modals at URL/edit/<section>
+ *
+ *
  */
 import { SnippetsContext } from "@context/SnippetsContext";
 import { useContext } from "react";
@@ -12,11 +15,13 @@ function SnippetDetailsPage() {
   if (!title) {
     throw new Error("[SnippetDetails.tsx] - No params");
   }
-  const context = useContext(SnippetsContext);
-  if (!context) {
+
+  // Get snippets
+  const snippetsContext = useContext(SnippetsContext);
+  if (!snippetsContext) {
     throw new Error("[SnippetDetails.tsx] - Failed to get context");
   }
-  const snippets = context.snippets;
+  const snippets = snippetsContext.snippets;
   const snippet = snippets.find((snippet) => {
     return snippet.title.toLowerCase() === title.toLowerCase();
   });

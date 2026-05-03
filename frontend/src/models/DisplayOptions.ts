@@ -1,5 +1,5 @@
 /**
- * DisplayOptions.ts
+ * models/DisplayOptions.ts
  *
  * Sorting and display options as well as the reducer state and action types
  */

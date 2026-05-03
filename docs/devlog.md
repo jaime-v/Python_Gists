@@ -2,6 +2,14 @@
 
 Log of what I've done for this project
 
+## May 2, 2026
+Frontend work on calling the API
+
+Some login confusion with managing token and stuff, specifically with context and 
+what Corey has in his tutorial
+
+Created some hardcoded data and buttons for testing out the API from the frontend
+
 ## April 30, 2026
 Trying to figure out how to use Outlet and different routes and such
 
@@ -16,6 +24,11 @@ Probably need context/hooks for users and authentication so we can check user pr
 a user is logged in
 
 Context is not contexting to other pages for some reason...
+
+I should probably be working on functionality before doing the display stuff though, I'll get on
+that now
+
+I basically just need to just create UI for calling my API
 
 ## April 29, 2026
 

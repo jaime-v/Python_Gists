@@ -1,7 +1,9 @@
 /**
- * SnippetCreationPage.tsx
+ * pages/SnippetCreationPage.tsx
  *
  * Page for creating a snippet
+ *
+ * If user tries to create a post, we should redirect to the login page
  */
 import { Button, Form } from "react-bootstrap";
 function SnippetCreationPage() {

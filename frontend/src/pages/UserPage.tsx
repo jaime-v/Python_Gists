@@ -1,5 +1,5 @@
 /**
- * UserPage.tsx
+ * pages/UserPage.tsx
  *
  * Renders a user's profile page
  *

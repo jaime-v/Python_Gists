@@ -1,5 +1,5 @@
 /**
- * Footer.tsx
+ * components/Footer/Footer.tsx
  *
  * Footer for the application
  */

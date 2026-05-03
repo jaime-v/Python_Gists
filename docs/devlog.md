@@ -2,6 +2,11 @@
 
 Log of what I've done for this project
 
+## May 3, 2026
+For some reason, manually setting the header in login to application/x-www-form-urlencoded 
+makes it send something weird and we get a 422 error, and removing the header makes it okay... 
+Weird
+
 ## May 2, 2026
 Frontend work on calling the API
 

@@ -31,18 +31,18 @@ export async function loginUser(
   // So I need a form, which is structured for UserLogin (email and password)
   // Pass the form or form data into this function
   // Send the form data
-  const formData = userFormData;
-  console.log("received", formData.get("username"));
-  console.log("received", formData.get("plain_password"));
+  // const formData = userFormData;
+  console.log("received", userFormData.get("username"));
+  console.log("received", userFormData.get("password"));
   try {
     const response = await fetch(fullURL, {
       method: "POST",
-      headers: {
-        // Apparently OAuth2 expects form data
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
+      // headers: {
+      // Apparently OAuth2 expects form data
+      // "Content-Type": "application/x-www-form-urlencoded",
+      // },
       // Body is formdata
-      body: formData,
+      body: userFormData,
     });
 
     // Error check

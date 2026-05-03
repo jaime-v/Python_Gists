@@ -78,7 +78,7 @@ const updatedSnippet2: SnippetUpdate = {
 
 const tempLogin = new FormData();
 tempLogin.append("username", "user@example.com");
-tempLogin.append("plain_password", "testpass1");
+tempLogin.append("password", "testpass1");
 
 function HomePage() {
   return (

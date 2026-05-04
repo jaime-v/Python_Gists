@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 
 function useInitSnippets() {
   const [snippets, setSnippets] = useState<Snippet[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [snippetsLoading, setSnippetsLoading] = useState<boolean>(true);
 
   // Read snippets from API on mount
   useEffect(() => {
@@ -24,13 +24,13 @@ function useInitSnippets() {
         console.error(e);
         setSnippets([]);
       } finally {
-        setLoading(false);
+        setSnippetsLoading(false);
       }
     }
     initSnippets();
   }, []);
 
-  return { snippets, setSnippets, loading, setLoading };
+  return { snippets, setSnippets, snippetsLoading, setSnippetsLoading };
 }
 
 export default useInitSnippets;

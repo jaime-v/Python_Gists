@@ -3,6 +3,8 @@
  *
  * Home Page if you couldn't tell
  */
+import { AuthContext } from "@context/AuthContext";
+import { SnippetsContext } from "@context/SnippetsContext";
 import type {
   SnippetCreate,
   SnippetUpdate,
@@ -29,6 +31,7 @@ import {
   setToken,
   clearUserCache,
 } from "@services";
+import { useContext } from "react";
 import { Button } from "react-bootstrap";
 
 const user1: UserCreate = {
@@ -77,17 +80,38 @@ const updatedSnippet2: SnippetUpdate = {
 };
 
 const tempLogin = new FormData();
-tempLogin.append("username", "user@example.com");
-tempLogin.append("password", "testpass1");
+// tempLogin.append("username", "user@example.com");
+// tempLogin.append("password", "testpass1");
+tempLogin.append("username", "foobar@gmail.com");
+tempLogin.append("password", "foobarpass1");
+const secondLogin = new FormData();
+secondLogin.append("username", "johndoe@gmail.com");
+secondLogin.append("password", "testpassword1!");
 
 function HomePage() {
+  const snippetsContext = useContext(SnippetsContext);
+  if (!snippetsContext) {
+    throw new Error("Failed to get snippets context");
+  }
+  const snippets = snippetsContext.snippets;
+  const authContext = useContext(AuthContext);
+  if (!authContext) {
+    throw new Error("Failed to get auth context");
+  }
+  const currentUser = authContext.currentUser;
   return (
     <>
       <h1>Homepage</h1>
       <h2>Testing out services module functions</h2>
+      {currentUser && (
+        <h3>There is a logged in user! {currentUser.username}</h3>
+      )}
       <h3>AuthService</h3>
       <Button onClick={async () => console.log(await loginUser(tempLogin))}>
         Log in user 2
+      </Button>
+      <Button onClick={async () => console.log(await loginUser(secondLogin))}>
+        Log in user 3
       </Button>
       <Button onClick={async () => console.log(await getCurrentUser())}>
         Get current user
@@ -162,6 +186,12 @@ function HomePage() {
       <Button onClick={async () => console.log(await getUserSnippets(2))}>
         Get user 2 snippets
       </Button>
+      <h3>Snippets in DB</h3>
+      <ul>
+        {snippets.map((snippet) => {
+          return <li key={snippet.id}>{snippet.title}</li>;
+        })}
+      </ul>
     </>
   );
 }

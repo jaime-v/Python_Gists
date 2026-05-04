@@ -44,6 +44,7 @@ import useInitSnippets from "@hooks/useInitSnippets";
 import { SnippetsContext } from "@context/SnippetsContext";
 import { Outlet, Route, Routes } from "react-router-dom";
 import { AuthContext } from "@context/AuthContext";
+import useAuth from "@hooks/useAuth";
 
 function Layout() {
   return (
@@ -56,23 +57,48 @@ function Layout() {
 }
 
 function App() {
-  const { snippets, setSnippets, loading, setLoading } = useInitSnippets();
+  const { snippets, setSnippets, snippetsLoading, setSnippetsLoading } =
+    useInitSnippets();
+  const {
+    currentUser,
+    setCurrentUser,
+    loggedIn,
+    setLoggedIn,
+    userLoading,
+    setUserLoading,
+  } = useAuth();
   return (
     <>
-      <SnippetsContext.Provider
-        value={{ snippets, setSnippets, loading, setLoading }}
+      <AuthContext.Provider
+        value={{
+          currentUser,
+          setCurrentUser,
+          loggedIn,
+          setLoggedIn,
+          userLoading,
+          setUserLoading,
+        }}
       >
-        <Routes>
-          <Route path="/" element={<Layout />}>
-            <Route index element={<HomePage />} />
-            <Route path="snippets" element={<SnippetsPage />} />
-            <Route path="snippet/:title" element={<SnippetDetailsPage />} />
-            <Route path="create" element={<SnippetCreationPage />} />
-            <Route path="login" element={<LoginPage />} />
-            <Route path="user/:username" element={<UserPage />} />
-          </Route>
-        </Routes>
-      </SnippetsContext.Provider>
+        <SnippetsContext.Provider
+          value={{
+            snippets,
+            setSnippets,
+            snippetsLoading,
+            setSnippetsLoading,
+          }}
+        >
+          <Routes>
+            <Route path="/" element={<Layout />}>
+              <Route index element={<HomePage />} />
+              <Route path="snippets" element={<SnippetsPage />} />
+              <Route path="snippet/:title" element={<SnippetDetailsPage />} />
+              <Route path="create" element={<SnippetCreationPage />} />
+              <Route path="login" element={<LoginPage />} />
+              <Route path="user/:username" element={<UserPage />} />
+            </Route>
+          </Routes>
+        </SnippetsContext.Provider>
+      </AuthContext.Provider>
     </>
   );
 }

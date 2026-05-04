@@ -32,8 +32,6 @@ export async function loginUser(
   // Pass the form or form data into this function
   // Send the form data
   // const formData = userFormData;
-  console.log("received", userFormData.get("username"));
-  console.log("received", userFormData.get("password"));
   try {
     const response = await fetch(fullURL, {
       method: "POST",

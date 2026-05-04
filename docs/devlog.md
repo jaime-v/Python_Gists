@@ -7,6 +7,17 @@ For some reason, manually setting the header in login to application/x-www-form-
 makes it send something weird and we get a 422 error, and removing the header makes it okay... 
 Weird
 
+Auth seems to work on the frontend now, just need to get token and pass it into the 
+fetch request. It feels a bit awkward copy-pasting getToken() method into every protected 
+route though, maybe I should improve on that somehow... I think this is where I need context
+and also service for auth
+
+I think I understand what I should be going for now, will update plan and hopefully finish the 
+frontend soon
+
+Did some Auth stuff, and got the basic functionality working with hardcoded data, now I need 
+to actually do the frontend and create pages and components and stuff that use the functionality
+
 ## May 2, 2026
 Frontend work on calling the API
 

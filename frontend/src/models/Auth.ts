@@ -13,8 +13,10 @@ export type Token = {
 
 // Context for logged in user
 export type AuthContextType = {
-  loggedInUser: UserPrivate;
-  setLoggedInUser: React.Dispatch<React.SetStateAction<UserPrivate>>;
-  loading: boolean;
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  currentUser: UserPrivate | null;
+  setCurrentUser: React.Dispatch<React.SetStateAction<UserPrivate | null>>;
+  loggedIn: boolean;
+  setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
+  userLoading: boolean;
+  setUserLoading: React.Dispatch<React.SetStateAction<boolean>>;
 };

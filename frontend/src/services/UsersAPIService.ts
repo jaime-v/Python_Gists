@@ -11,6 +11,7 @@ import type {
   UserPublic,
   UserUpdate,
 } from "@models";
+import { getToken } from "./AuthService";
 
 const baseURL = "http://127.0.0.1:8000/api/users";
 
@@ -92,12 +93,17 @@ export async function updateUser(
   userId: number,
   updatedUser: UserUpdate,
 ): Promise<UserPrivate> {
+  const access_token = getToken();
+  if (!access_token) {
+    throw new Error("No user is logged in");
+  }
   const fullURL = `${baseURL}/${userId}`;
   try {
     const response = await fetch(fullURL, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${access_token}`,
       },
       // Convert to object to JSON-formatted string
       body: JSON.stringify(updatedUser),
@@ -119,10 +125,17 @@ export async function updateUser(
 }
 
 export async function deleteUser(userId: number): Promise<string> {
+  const access_token = getToken();
+  if (!access_token) {
+    throw new Error("No user is logged in");
+  }
   const fullURL = `${baseURL}/${userId}`;
   try {
     const response = await fetch(fullURL, {
       method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
     });
 
     // Error check

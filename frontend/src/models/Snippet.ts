@@ -36,6 +36,6 @@ export type SnippetUpdate = {
 export type SnippetsContextType = {
   snippets: Snippet[];
   setSnippets: React.Dispatch<React.SetStateAction<Snippet[]>>;
-  loading: boolean;
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  snippetsLoading: boolean;
+  setSnippetsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 };

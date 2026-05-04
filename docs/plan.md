@@ -28,19 +28,28 @@ useful to learn and improve the app
 
 # TODO:
 
-Test Backend
-Start working on frontend
-Connect Backend and Frontend
-Test Frontend
-e2e Tests
-CI/CD
-Docker
-Deploy
-Done??
+Create additional functions for handling inside components, based on interactivity. These will 
+differ based on component
 
-## Additional features to add
+e.g. Clicking the login button will set context to loading, call relevant service functions, set 
+context based on the service function returns, then re-render the UI
+
+Goal for now is to just get this app deployed and then we can do more stuff
+
+- Manual Testing
+- Deploy 
+
+More stuff:
+
+- Unit tests, integration tests, e2e Tests
+- CI/CD
+- Docker
+
+## Additional features to add/do
 
 Profile pictures with AWS S3 Object Storage (Corey tutorial)
 Transfer ownership of snippets
 Password management (Corey tutorial)
 Refactor?
+Experiment more with React stuff, e.g. passing children as props, expanding on custom hooks, 
+diving more into context, etc.

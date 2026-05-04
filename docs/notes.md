@@ -282,6 +282,28 @@ useReducer is cool
 
 Really it's just a bunch of notes in the form of comments, maybe I should move those here
 
+### THOUGHT PROCESS ABOUT CONTEXT, SERVICES, AND HOOKS:
+I need to find a way to pass the current user around, and also track if there is a user logged 
+in. Services should be handling the login, logout, get current user, etc. functions. Context
+is for the components, so it should be separate. Components will see context and render 
+differently based on if there is a user logged in or not. Other service modules don't use
+context, they just import the other services... 
+
+So that means context and service actually don't interact with each other at all? Not exactly 
+because I create my snippets UI state using my init hook, then I pass those values around 
+with context. So context is just saying "component has these values if it needs them", custom 
+hooks (at least for initializing) are saying "we create the context values here", and services
+are saying "here's how the logic works". So I should start off by creating the state of the 
+current logged in user (null), and the logged in status (false). This is context. Then we can 
+initialize with a custom hook, if there is a token already present. Then any event that calls 
+the AuthService should then modify the context value we have. So services shouldn't modify 
+context, but context depends on values that the service returns, it's just managed with things 
+like setState.
+
+I probably could have just reviewed the code I had for Snippets to figure out what I was doing
+but I guess it worked out
+
+
 ## TypeScript
 keyof typeof is used for extracting keys of an object
 

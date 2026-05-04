@@ -98,12 +98,17 @@ export async function updateSnippetFull(
   snippetId: number,
   updatedSnippet: SnippetCreate,
 ): Promise<Snippet> {
+  const access_token = getToken();
+  if (!access_token) {
+    throw new Error("No user is logged in");
+  }
   const fullURL = `${baseURL}/${snippetId}`;
   try {
     const response = await fetch(fullURL, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${access_token}`,
       },
       // Convert to object to JSON-formatted string
       body: JSON.stringify(updatedSnippet),
@@ -128,12 +133,17 @@ export async function updateSnippetPartial(
   snippetId: number,
   updatedSnippet: SnippetUpdate,
 ): Promise<Snippet> {
+  const access_token = getToken();
+  if (!access_token) {
+    throw new Error("No user is logged in");
+  }
   const fullURL = `${baseURL}/${snippetId}`;
   try {
     const response = await fetch(fullURL, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${access_token}`,
       },
       // Convert to object to JSON-formatted string
       body: JSON.stringify(updatedSnippet),
@@ -155,10 +165,17 @@ export async function updateSnippetPartial(
 }
 
 export async function deleteSnippet(snippetId: number): Promise<string> {
+  const access_token = getToken();
+  if (!access_token) {
+    throw new Error("No user is logged in");
+  }
   const fullURL = `${baseURL}/${snippetId}`;
   try {
     const response = await fetch(fullURL, {
       method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
     });
 
     // Error check

@@ -7,21 +7,42 @@
  *
  *
  */
+import { AuthContext } from "@context/AuthContext";
 import { SnippetsContext } from "@context/SnippetsContext";
 import { useContext } from "react";
+import { Button } from "react-bootstrap";
 import { useParams } from "react-router-dom";
+
+function OwnerButtons() {
+  return (
+    <>
+      <Button variant="warning">Edit</Button>
+      <Button variant="danger">Delete</Button>
+    </>
+  );
+}
 function SnippetDetailsPage() {
   const { title } = useParams();
   if (!title) {
     throw new Error("[SnippetDetails.tsx] - No params");
   }
 
+  const authContext = useContext(AuthContext);
+  if (!authContext) {
+    throw new Error("Failed to get auth context");
+  }
+  const currentUser = authContext.currentUser;
+
   // Get snippets
   const snippetsContext = useContext(SnippetsContext);
   if (!snippetsContext) {
-    throw new Error("[SnippetDetails.tsx] - Failed to get context");
+    throw new Error("[SnippetDetails.tsx] - Failed to get snippets context");
   }
   const snippets = snippetsContext.snippets;
+  const snippetsLoading = snippetsContext.snippetsLoading;
+  if (snippetsLoading) {
+    return <h1>SNIPPETS LOADING</h1>;
+  }
   const snippet = snippets.find((snippet) => {
     return snippet.title.toLowerCase() === title.toLowerCase();
   });
@@ -38,8 +59,13 @@ function SnippetDetailsPage() {
       <h2>{snippet.language}</h2>
       <h3>{snippet.description}</h3>
       <code>{snippet.code}</code>
-      <h4>Created: {snippet.creationDate.toLocaleString()}</h4>
-      <h4>Last Updated: {snippet.creationDate.toLocaleString()}</h4>
+      <h4>Created: {new Date(snippet.creation_date).toLocaleTimeString()}</h4>
+      <h4>
+        Last Updated: {new Date(snippet.creation_date).toLocaleTimeString()}
+      </h4>
+      {currentUser &&
+        snippet.owner.username.toLowerCase() ===
+          currentUser.username.toLowerCase() && <OwnerButtons />}
     </>
   );
 }

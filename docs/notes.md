@@ -319,3 +319,6 @@ object, but I haven't used useReducer so I thought I would do it
 
 ## Frontend and Backend
 Should I be sending user id in UserPublic responses? probably not
+
+Make sure Frontend and Backend types/models/whatever have exact same naming, or you manually 
+translate between the response and the objects we want

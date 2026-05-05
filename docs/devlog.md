@@ -13,6 +13,18 @@ Also I should probably make the form components controlled
 
 Functionality seems to work though
 
+I just spent 30mins trying to figure out why my sorting wasn't working, at first thinking it 
+was because my function was trying to sort the snippets without waiting for the loading state, 
+so I added that, but it still didn't work, so I did a bunch of console.logs and found that the
+response object differs from the object type, so it was registering as undefined all the time.
+
+All because I decided to change the models from using snake_case to camelCase. But at least I 
+know now.
+
+And the snippets display page works now which is dope.
+
+Also got the snippet details page working a bit.
+
 ## May 3, 2026
 For some reason, manually setting the header in login to application/x-www-form-urlencoded 
 makes it send something weird and we get a 422 error, and removing the header makes it okay... 

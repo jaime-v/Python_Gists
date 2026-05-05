@@ -14,11 +14,12 @@ type SnippetBase = {
 };
 
 // Define the object for Snippets, these will be displayed on the frontend (also the response object)
+// This is the response object, so we will use snake case to match what I did in the Python backend
 export type Snippet = SnippetBase & {
   id: number;
   owner: UserPrivate;
-  creationDate: Date;
-  lastUpdatedDate: Date;
+  creation_date: Date;
+  last_updated_date: Date;
 };
 
 // Separate type for SnippetCreate, but nothing here for now since it's basically the same as the base

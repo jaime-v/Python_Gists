@@ -14,10 +14,10 @@ function NavBar() {
           Snippets Home Page
         </Navbar.Brand>
         <Nav className="me-auto">
-          <Nav.Link as={Link} to={`/`}>
+          <Nav.Link as={Link} to={`/snippets`}>
             Link 1
           </Nav.Link>
-          <Nav.Link as={Link} to={`/`}>
+          <Nav.Link as={Link} to={`/login`}>
             Link 2
           </Nav.Link>
         </Nav>

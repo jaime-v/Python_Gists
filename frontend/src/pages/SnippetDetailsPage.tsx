@@ -32,6 +32,7 @@ function SnippetDetailsPage() {
     throw new Error("Failed to get auth context");
   }
   const currentUser = authContext.currentUser;
+  const userLoading = authContext.userLoading;
 
   // Get snippets
   const snippetsContext = useContext(SnippetsContext);
@@ -40,8 +41,8 @@ function SnippetDetailsPage() {
   }
   const snippets = snippetsContext.snippets;
   const snippetsLoading = snippetsContext.snippetsLoading;
-  if (snippetsLoading) {
-    return <h1>SNIPPETS LOADING</h1>;
+  if (snippetsLoading || userLoading) {
+    return <h1>LOADING</h1>;
   }
   const snippet = snippets.find((snippet) => {
     return snippet.title.toLowerCase() === title.toLowerCase();

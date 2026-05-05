@@ -19,19 +19,12 @@ const baseURL = "http://127.0.0.1:8000/api/users";
 
 import type { Token, UserPrivate } from "@models";
 
-export async function loginUser(
-  /*userData: UserLogin*/ /*loginForm: HTMLFormElement */ userFormData: FormData,
-): Promise<Token> {
+export async function loginUser(userFormData: FormData): Promise<Token> {
   // Okay apparently i can do this with json still, but the fastapi docs shows me the
   // x-www-form-urlencoded one
   // Corey also uses form data, so I will go with that one
   const fullURL = `${baseURL}/token`;
 
-  // new FormData() requires a Form Element
-  // So I need a form, which is structured for UserLogin (email and password)
-  // Pass the form or form data into this function
-  // Send the form data
-  // const formData = userFormData;
   try {
     const response = await fetch(fullURL, {
       method: "POST",

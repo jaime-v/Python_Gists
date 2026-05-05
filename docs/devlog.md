@@ -2,6 +2,17 @@
 
 Log of what I've done for this project
 
+## May 4, 2026
+Made a basic login page with context, handling submission, form stuff, etc.
+
+Made a basic snippet creation page, but I'm not sure why my creation object is erroring...
+
+Also not sure how much verification/validation I should be adding
+
+Also I should probably make the form components controlled
+
+Functionality seems to work though
+
 ## May 3, 2026
 For some reason, manually setting the header in login to application/x-www-form-urlencoded 
 makes it send something weird and we get a 422 error, and removing the header makes it okay... 

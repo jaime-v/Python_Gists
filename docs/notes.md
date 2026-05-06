@@ -77,6 +77,12 @@ Not using .env directly because pydantic-settings is supposedly better
 403 means authenticated, but cannot take an action
 It's the difference between "you need to log in" and "you are not allowed to do this"
 
+Changed the backend schemas and frontend types to return the user id on responses, but I think 
+I should be using UUIDs for this and keep the autoincrementing id for internal use
+
+Should I even be worrying about this in a random personal project? Probably don't need to, but 
+would be good practice to do it
+
 ## Database things
 
 Importing Base (declarative base) into other modules doesn't seem to work,
@@ -339,8 +345,6 @@ Although, it uses the as keyword, so i'm not sure how good it actually is
 Used a discriminated union in the display options reducer, it's not necessary after cleaning it
 up a bit, but it seems good to use. Just in general, I can probably just useState with a single
 object, but I haven't used useReducer so I thought I would do it
-
-
 
 ## Frontend and Backend
 Should I be sending user id in UserPublic responses? probably not

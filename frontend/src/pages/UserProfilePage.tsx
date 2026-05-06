@@ -7,8 +7,8 @@
  */
 
 import { AuthContext } from "@context/AuthContext";
-import type { UserPrivate, UserPublic } from "@models";
-import { getUserByUsername } from "@services";
+import type { UserPublic, UserPrivate, Snippet } from "@models";
+import { getUserByUsername, getUserSnippetsByUsername } from "@services";
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
@@ -23,28 +23,51 @@ if the usernames are not the same, then we get user
 looks like we will need a loading state then fetch
 */
 
-function UserPublicPage({ user }: { user: UserPublic }) {
+function UserPublicPage({
+  user,
+  snippets,
+}: {
+  user: UserPublic;
+  snippets: Snippet[];
+}) {
   return (
     <>
       <h1>{user.username}</h1>
       <h2>Snippets would go here</h2>
+      <ul>
+        {snippets.map((snippet) => {
+          return <li key={snippet.id}>{snippet.title}</li>;
+        })}
+      </ul>
     </>
   );
 }
 
-function UserPrivatePage({ user }: { user: UserPrivate }) {
+function UserPrivatePage({
+  user,
+  snippets,
+}: {
+  user: UserPrivate;
+  snippets: Snippet[];
+}) {
   return (
     <>
       <h1>
         {user.username} -- {user.email}
       </h1>
       <h2>Snippets would go here</h2>
+      <ul>
+        {snippets.map((snippet) => {
+          return <li key={snippet.id}>{snippet.title}</li>;
+        })}
+      </ul>
     </>
   );
 }
 
 function UserProfilePage() {
   const [profile, setProfile] = useState<UserPublic | UserPrivate | null>(null);
+  const [profileSnippets, setProfileSnippets] = useState<Snippet[]>([]);
   // Get username for path
   const { username } = useParams();
   if (!username) {
@@ -66,12 +89,17 @@ function UserProfilePage() {
       try {
         if (currentUser && username === currentUser.username) {
           setProfile(currentUser);
+          setProfileSnippets(
+            await getUserSnippetsByUsername(currentUser.username),
+          );
         } else {
           const user = await getUserByUsername(username);
           if (user) {
             setProfile(user);
+            setProfileSnippets(await getUserSnippetsByUsername(username));
           } else {
             setProfile(null);
+            setProfileSnippets([]);
           }
         }
       } catch (error) {
@@ -96,7 +124,7 @@ function UserProfilePage() {
   ) {
     return (
       <>
-        <UserPrivatePage user={currentUser} />
+        <UserPrivatePage user={currentUser} snippets={profileSnippets} />
       </>
     );
   }
@@ -104,7 +132,7 @@ function UserProfilePage() {
   // Getting other user profile... but i need to fetch here
   return (
     <>
-      <UserPublicPage user={profile} />
+      <UserPublicPage user={profile} snippets={profileSnippets} />
     </>
   );
 }

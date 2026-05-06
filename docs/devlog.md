@@ -28,6 +28,14 @@ It sounds like a bad idea though, maybe I should have the response include the i
 That way I can just query for the user object by username, get the snippets that match the user 
 id, then move along just fine
 
+Ended up just returning user id in responses and it works now. Idk how to feel about returning 
+user id though. My intuition was that id is sensitive, but I guess not since you can't really 
+access much with just the id. To access more sensitive information, you would need the token
+
+But google says that I should probably not be showing the user id, only using it internally
+So maybe I should be using a public_id with uuid and a separate id for internal use? I'm not 
+sure what the best method is
+
 
 ## May 4, 2026
 Made a basic login page with context, handling submission, form stuff, etc.

@@ -12,12 +12,13 @@ type UserBase = {
 };
 
 // Type for displaying public user information -- can also be the response object
-export type UserPublic = UserBase & {};
+export type UserPublic = UserBase & {
+  id: number;
+};
 
 // Type for displaying all user information
 export type UserPrivate = UserPublic & {
   email: string;
-  id: number;
 };
 
 // Type for user creation

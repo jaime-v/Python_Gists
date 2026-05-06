@@ -32,6 +32,7 @@ class UserPublic(BaseModel):
     # Modern version of class Config
     model_config = ConfigDict(from_attributes=True)
     username: str
+    id: int
 
     # Allows reading from SQLAlchemy objects
     # class Config:
@@ -39,7 +40,6 @@ class UserPublic(BaseModel):
 
 
 class UserPrivate(UserPublic):
-    id: int
     email: EmailStr
 
 

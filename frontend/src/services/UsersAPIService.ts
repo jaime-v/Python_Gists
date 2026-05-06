@@ -111,6 +111,14 @@ export async function getUserByUsername(username: string): Promise<UserPublic> {
   }
 }
 
+export async function getUserSnippetsByUsername(
+  username: string,
+): Promise<Snippet[]> {
+  const user = await getUserByUsername(username);
+  const snippets = await getUserSnippets(user.id);
+  return snippets;
+}
+
 export async function updateUser(
   userId: number,
   updatedUser: UserUpdate,

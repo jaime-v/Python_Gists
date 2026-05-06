@@ -167,23 +167,22 @@ async def get_user_snippets(user_id: int, db: Annotated[AsyncSession, Depends(ge
 
 
 # Get user snippets by username
-# TODO: Make this work, might require a rework in the models
-# @router.get("/username/{user_username}/snippets", response_model=list[SnippetResponse])
-# async def get_user_snippets_by_username(user_username: str, db: Annotated[AsyncSession, Depends(get_db)]):
-#     result = await db.execute(select(models.User).where(models.User.username == user_username))
-#     user = result.scalars().first()
-#     if not user:
-#         raise HTTPException(
-#             status_code=status.HTTP_404_NOT_FOUND,
-#             detail="User not found",
-#         )
-#     result = await db.execute(
-#         select(models.Snippet)
-#         .options(selectinload(models.Snippet.owner))
-#         .where(models.Snippet.owner.username == user_username)
-#     )
-#     snippets = result.scalars().all()
-#     return snippets
+@router.get("/username/{user_username}/snippets", response_model=list[SnippetResponse])
+async def get_user_snippets_by_username(user_username: str, db: Annotated[AsyncSession, Depends(get_db)]):
+    result = await db.execute(select(models.User).where(models.User.username == user_username))
+    user = result.scalars().first()
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found",
+        )
+    result = await db.execute(
+        select(models.Snippet)
+        .options(selectinload(models.Snippet.owner))
+        .where(models.Snippet.owner_id == user.id)
+    )
+    snippets = result.scalars().all()
+    return snippets
 
 
 # Get all users from database

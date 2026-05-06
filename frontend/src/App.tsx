@@ -37,7 +37,8 @@ import {
   SnippetsPage,
   SnippetDetailsPage,
   HomePage,
-  UserPage,
+  UserProfilePage,
+  CreateUserPage,
 } from "@pages";
 import { Footer, Header } from "@components";
 import useInitSnippets from "@hooks/useInitSnippets";
@@ -94,7 +95,8 @@ function App() {
               <Route path="snippet/:title" element={<SnippetDetailsPage />} />
               <Route path="create" element={<SnippetCreationPage />} />
               <Route path="login" element={<LoginPage />} />
-              <Route path="user/:username" element={<UserPage />} />
+              <Route path="register" element={<CreateUserPage />} />
+              <Route path="user/:username" element={<UserProfilePage />} />
             </Route>
           </Routes>
         </SnippetsContext.Provider>

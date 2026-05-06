@@ -21,6 +21,7 @@ function OwnerButtons() {
     </>
   );
 }
+
 function SnippetDetailsPage() {
   const { title } = useParams();
   if (!title) {

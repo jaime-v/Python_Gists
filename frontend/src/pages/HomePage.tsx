@@ -88,6 +88,9 @@ const secondLogin = new FormData();
 secondLogin.append("username", "johndoe@gmail.com");
 secondLogin.append("password", "testpassword1!");
 
+// testcreate@gmail.com
+// 123456789
+
 function HomePage() {
   const snippetsContext = useContext(SnippetsContext);
   if (!snippetsContext) {

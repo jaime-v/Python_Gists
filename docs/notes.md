@@ -206,6 +206,20 @@ good for both async and sync development
 
 Can put prefixes inside main rather than the router, I like the prefix inside the router though
 
+## Routing
+
+If multiple routes have the same path and method 
+e.g. two paths with /{variable}, then FastAPI will try to execute the first one, no matter what
+
+If there are two routes with the same path and the same method, you need to create a separate 
+route with a different path
+
+In this case, we need to get user by user id with /{user_id} and also a different path to get 
+user by username with /username/{user_username}
+
+If we don't separate them, then it will always default to the first one resulting in 422 
+(name in id field) or 404 (id in name field)
+
 ## Pagination
 
 Useful for scaling, we can use query parameters for skip and limit, so we don't load all
@@ -282,6 +296,17 @@ useReducer is cool
 
 Really it's just a bunch of notes in the form of comments, maybe I should move those here
 
+## useEffect in UserProfilePage (Rendering different profiles)
+
+When creating the UserProfilePage, we broke down the logic of what is supposed to happen in 
+the component, and also figured out when it was supposed to happen.
+
+Ended up with a useEffect that would check if currentUser is the profile we want, if not then 
+attempt to fetch the user by username, and if there is no user, then set profile to null. This 
+effect should be rerun every time the username in search params changes, or when the currentUser 
+changes. Struggled on this a lot because... i'm not sure honestly. It seems so obvious now 
+looking back at it
+
 ### THOUGHT PROCESS ABOUT CONTEXT, SERVICES, AND HOOKS:
 I need to find a way to pass the current user around, and also track if there is a user logged 
 in. Services should be handling the login, logout, get current user, etc. functions. Context
@@ -322,3 +347,10 @@ Should I be sending user id in UserPublic responses? probably not
 
 Make sure Frontend and Backend types/models/whatever have exact same naming, or you manually 
 translate between the response and the objects we want
+
+### THOUGHT PROCESS ABOUT FETCHING USER BY USERNAME AND DISPLAYING ON FRONTEND
+My current thought process is to get the user profile based on username. If the current user has 
+the same username as the one we are searching for (user is looking at their own profile), then 
+we render the private profile page. Otherwise, we render the public profile page of the target 
+user. Problem is that I don't have a list of users to grab from, so I can't just filter. So I 
+need to fetch the user from the API by username and also fetch the snippets once I have the user.

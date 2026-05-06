@@ -89,6 +89,28 @@ export async function getUser(userId: number): Promise<UserPublic> {
   }
 }
 
+export async function getUserByUsername(username: string): Promise<UserPublic> {
+  const fullURL = `${baseURL}/username/${username}`;
+  try {
+    const response = await fetch(fullURL, {
+      method: "GET",
+    });
+
+    // Error check
+    if (!response.ok) {
+      throw new Error("Failed to get user");
+    }
+
+    // Parse json and return it
+    const data: UserPublic = await response.json();
+    return data;
+  } catch (error) {
+    const e = error as Error;
+    console.error(e);
+    throw e;
+  }
+}
+
 export async function updateUser(
   userId: number,
   updatedUser: UserUpdate,

@@ -1,5 +1,5 @@
 /**
- * components/UserPage/UserPublicProfile.tsx
+ * components/UserProfilePage/UserPublicProfile.tsx
  *
  * Component for displaying a user profile that is not the logged in user
  */

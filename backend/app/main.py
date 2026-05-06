@@ -20,7 +20,6 @@ from app.routers import users, snippets
 from app.middleware import timing
 from app.db import engine, get_db
 
-
 # Lifespan handles on startup and on shutdown events
 # @asynccontextmanager
 # async def lifespan(_app: FastAPI):
@@ -30,6 +29,7 @@ from app.db import engine, get_db
 #     yield
 #     # Shutdown
 #     await engine.dispose()
+
 
 # Working with Alembic
 @asynccontextmanager

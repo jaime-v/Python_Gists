@@ -130,6 +130,23 @@ async def get_user(user_id: int, db: Annotated[AsyncSession, Depends(get_db)]):
     return user
 
 
+# Get user from database by username
+@router.get("/username/{user_username}", response_model=UserPublic)
+async def get_user_by_username(
+    user_username: str, db: Annotated[AsyncSession, Depends(get_db)]
+):
+    result = await db.execute(
+        select(models.User).where(models.User.username == user_username)
+    )
+    user = result.scalars().first()
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found",
+        )
+    return user
+
+
 # Get user snippets
 @router.get("/{user_id}/snippets", response_model=list[SnippetResponse])
 async def get_user_snippets(user_id: int, db: Annotated[AsyncSession, Depends(get_db)]):
@@ -141,19 +158,32 @@ async def get_user_snippets(user_id: int, db: Annotated[AsyncSession, Depends(ge
             detail="User not found",
         )
     result = await db.execute(
-        # Select from snippets table where the owner id of that snippet matches the
-        # requested user id
-        # select(models.Snippet).where(models.Snippet.owner_id == user_id)
-        # Need to test these two, above is what I think works and below is the Corey tutorial
-        # Supposedly it's because the response requires the owner object, not just the id
-        # Select from snippets table, load in the owners of each snippet where
-        # the owner's id matches the requested user id
         select(models.Snippet)
         .options(selectinload(models.Snippet.owner))
         .where(models.Snippet.owner_id == user_id)
     )
     snippets = result.scalars().all()
     return snippets
+
+
+# Get user snippets by username
+# TODO: Make this work, might require a rework in the models
+# @router.get("/username/{user_username}/snippets", response_model=list[SnippetResponse])
+# async def get_user_snippets_by_username(user_username: str, db: Annotated[AsyncSession, Depends(get_db)]):
+#     result = await db.execute(select(models.User).where(models.User.username == user_username))
+#     user = result.scalars().first()
+#     if not user:
+#         raise HTTPException(
+#             status_code=status.HTTP_404_NOT_FOUND,
+#             detail="User not found",
+#         )
+#     result = await db.execute(
+#         select(models.Snippet)
+#         .options(selectinload(models.Snippet.owner))
+#         .where(models.Snippet.owner.username == user_username)
+#     )
+#     snippets = result.scalars().all()
+#     return snippets
 
 
 # Get all users from database

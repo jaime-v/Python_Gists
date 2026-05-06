@@ -2,6 +2,33 @@
 
 Log of what I've done for this project
 
+## May 5, 2026
+Got the user creation page functionality done
+
+Currently struggling with rendering the public vs private user pages
+
+Had to do a few things:
+
+1. Create a separate route to get user by username, with a different route
+    - Tried to create one route that accepted both int and str, but didn't work
+    - Ended up creating two separate routes and it seems like the best solution
+2.
+    - useEffect for running logic when search params or current user changed
+
+Now, I need to finish up the page by getting and displaying the user's snippets, but having 
+struggles with that as well
+
+I need to get user by username, then get all snippets that where the owner's username matches 
+the user's username, but if I try to do models.Snippet.owner.username, I get a 500 server error 
+
+Getting by user id works because the snippet has the owner's id stored as well, so maybe I 
+should just add another foreign key for owner_username?
+
+It sounds like a bad idea though, maybe I should have the response include the id and username. 
+That way I can just query for the user object by username, get the snippets that match the user 
+id, then move along just fine
+
+
 ## May 4, 2026
 Made a basic login page with context, handling submission, form stuff, etc.
 

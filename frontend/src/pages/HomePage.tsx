@@ -80,16 +80,14 @@ const updatedSnippet2: SnippetUpdate = {
 };
 
 const tempLogin = new FormData();
-// tempLogin.append("username", "user@example.com");
-// tempLogin.append("password", "testpass1");
-tempLogin.append("username", "foobar@gmail.com");
-tempLogin.append("password", "foobarpass1");
 const secondLogin = new FormData();
 secondLogin.append("username", "johndoe@gmail.com");
 secondLogin.append("password", "testpassword1!");
 
 // testcreate@gmail.com
 // 123456789
+// barbaz@gmail.com
+// password1234
 
 function HomePage() {
   const snippetsContext = useContext(SnippetsContext);

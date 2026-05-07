@@ -10,7 +10,8 @@ import { AuthContext } from "@context/AuthContext";
 import type { UserPublic, UserPrivate, Snippet } from "@models";
 import { getUserByUsername, getUserSnippetsByUsername } from "@services";
 import { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Button } from "react-bootstrap";
+import { Link, Outlet, useParams } from "react-router-dom";
 
 /*
 How does this even work
@@ -56,11 +57,16 @@ function UserPrivatePage({
         {user.username} -- {user.email}
       </h1>
       <h2>Snippets would go here</h2>
+      <Button variant="warning">
+        <Link to={`/user/${user.username}/edit`}>Edit Profile</Link>
+      </Button>
       <ul>
         {snippets.map((snippet) => {
           return <li key={snippet.id}>{snippet.title}</li>;
         })}
       </ul>
+      {/* Also include an outlet for the edit modal */}
+      <Outlet />
     </>
   );
 }

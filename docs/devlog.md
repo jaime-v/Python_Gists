@@ -2,6 +2,15 @@
 
 Log of what I've done for this project
 
+## May 6, 2026
+Started implementing the edit buttons for each field on user profile and snippets, but 
+realized that it would be super complicated and annoying, so I'm opting for just one edit 
+button that will bring up a modal to edit the entire profile/entire snippet. It's simpler and 
+probably better for the scope of this project.
+
+Created the user edit modal and it seems to be able to change user data and access the api, but 
+the currentUser context stil sees the old user and won't update, so I need to look into that
+
 ## May 5, 2026
 Got the user creation page functionality done
 

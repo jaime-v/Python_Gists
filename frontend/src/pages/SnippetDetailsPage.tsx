@@ -11,12 +11,14 @@ import { AuthContext } from "@context/AuthContext";
 import { SnippetsContext } from "@context/SnippetsContext";
 import { useContext } from "react";
 import { Button } from "react-bootstrap";
-import { useParams } from "react-router-dom";
+import { Link, Outlet, useParams } from "react-router-dom";
 
-function OwnerButtons() {
+function OwnerButtons({ title }: { title: string }) {
   return (
     <>
-      <Button variant="warning">Edit</Button>
+      <Button variant="warning">
+        <Link to={`/snippet/${title}/edit`}>Edit</Link>
+      </Button>
       <Button variant="danger">Delete</Button>
     </>
   );
@@ -67,7 +69,11 @@ function SnippetDetailsPage() {
       </h4>
       {currentUser &&
         snippet.owner.username.toLowerCase() ===
-          currentUser.username.toLowerCase() && <OwnerButtons />}
+          currentUser.username.toLowerCase() && (
+          <OwnerButtons title={snippet.title} />
+        )}
+      {/* Outlet for the edit modal */}
+      <Outlet />
     </>
   );
 }

@@ -36,7 +36,6 @@ function CreateUserPage() {
     const result = await createUser(createUserForm);
     console.log(result);
   }
-  console.log("Current form", createUserForm);
   return (
     <>
       <h1>CreateUserPage</h1>

@@ -40,7 +40,12 @@ import {
   UserProfilePage,
   CreateUserPage,
 } from "@pages";
-import { Footer, Header } from "@components";
+import {
+  Footer,
+  Header,
+  UserProfileEdit,
+  SnippetDetailsEdit,
+} from "@components";
 import useInitSnippets from "@hooks/useInitSnippets";
 import { SnippetsContext } from "@context/SnippetsContext";
 import { Outlet, Route, Routes } from "react-router-dom";
@@ -92,11 +97,15 @@ function App() {
             <Route path="/" element={<Layout />}>
               <Route index element={<HomePage />} />
               <Route path="snippets" element={<SnippetsPage />} />
-              <Route path="snippet/:title" element={<SnippetDetailsPage />} />
+              <Route path="snippet/:title" element={<SnippetDetailsPage />}>
+                <Route path="edit" element={<SnippetDetailsEdit />} />
+              </Route>
               <Route path="create" element={<SnippetCreationPage />} />
               <Route path="login" element={<LoginPage />} />
               <Route path="register" element={<CreateUserPage />} />
-              <Route path="user/:username" element={<UserProfilePage />} />
+              <Route path="user/:username" element={<UserProfilePage />}>
+                <Route path="edit" element={<UserProfileEdit />} />
+              </Route>
             </Route>
           </Routes>
         </SnippetsContext.Provider>

@@ -43,7 +43,9 @@ function SnippetDetailsPage() {
     throw new Error("[SnippetDetails.tsx] - Failed to get snippets context");
   }
   const snippets = snippetsContext.snippets;
+  const setSnippets = snippetsContext.setSnippets;
   const snippetsLoading = snippetsContext.snippetsLoading;
+  const setSnippetsLoading = snippetsContext.setSnippetsLoading;
   if (snippetsLoading || userLoading) {
     return <h1>LOADING</h1>;
   }
@@ -63,9 +65,9 @@ function SnippetDetailsPage() {
       <h2>{snippet.language}</h2>
       <h3>{snippet.description}</h3>
       <code>{snippet.code}</code>
-      <h4>Created: {new Date(snippet.creation_date).toLocaleTimeString()}</h4>
+      <h4>Created: {new Date(snippet.creation_date).toLocaleString()}</h4>
       <h4>
-        Last Updated: {new Date(snippet.creation_date).toLocaleTimeString()}
+        Last Updated: {new Date(snippet.last_updated_date).toLocaleString()}
       </h4>
       {currentUser &&
         snippet.owner.username.toLowerCase() ===
@@ -73,7 +75,9 @@ function SnippetDetailsPage() {
           <OwnerButtons title={snippet.title} />
         )}
       {/* Outlet for the edit modal */}
-      <Outlet />
+      <Outlet
+        context={{ snippets, setSnippets, setSnippetsLoading, currentUser }}
+      />
     </>
   );
 }

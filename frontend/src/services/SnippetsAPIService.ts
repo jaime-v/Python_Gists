@@ -94,6 +94,28 @@ export async function getSnippet(snippetId: number): Promise<Snippet> {
   }
 }
 
+export async function getSnippetByTitle(title: string): Promise<Snippet> {
+  const fullURL = `${baseURL}/title/${title}`;
+  try {
+    const response = await fetch(fullURL, {
+      method: "GET",
+    });
+
+    // Error check
+    if (!response.ok) {
+      throw new Error("Failed to get snippet");
+    }
+
+    // Parse json and return it
+    const data: Snippet = await response.json();
+    return data;
+  } catch (error) {
+    const e = error as Error;
+    console.error(e);
+    throw e;
+  }
+}
+
 export async function updateSnippetFull(
   snippetId: number,
   updatedSnippet: SnippetCreate,

@@ -6,7 +6,7 @@
 
 import { AuthContext } from "@context/AuthContext";
 import type { UserUpdate } from "@models";
-import { updateUser } from "@services";
+import { logout, updateUser } from "@services";
 import { useContext, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
@@ -17,7 +17,9 @@ function UserProfileEdit() {
     throw new Error("Failed to get auth context");
   }
   const currentUser = authContext.currentUser;
+  const setLoggedIn = authContext.setLoggedIn;
   const setCurrentUser = authContext.setCurrentUser;
+  const setUserLoading = authContext.setUserLoading;
   if (!currentUser) {
     throw new Error("No current user, but we are on user page? should be 401");
   }
@@ -40,6 +42,17 @@ function UserProfileEdit() {
     // Navigate to user profile
     navigate(`/user/${params.username}`);
   };
+  const handleUpdatedClose = () => {
+    // Navigate to home on update
+    navigate(`/`);
+  };
+  const handleLogout = () => {
+    setUserLoading(true);
+    logout();
+    setLoggedIn(false);
+    setCurrentUser(null);
+    setUserLoading(false);
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -61,15 +74,32 @@ function UserProfileEdit() {
       throw new Error("No current user");
     }
     try {
-      const result = await updateUser(currentUser.id, updatedProfile);
-      console.log(result);
-      setCurrentUser(result);
+      // Editing the profile will log the user out
+      // Empty fields should keep the previous state
+      const updateData: UserUpdate = {
+        username: updatedProfile.username,
+        email: updatedProfile.email,
+        plain_password: updatedProfile.plain_password,
+      };
+      if (updateData.username === "") {
+        delete updateData.username;
+      }
+      if (updateData.email === "") {
+        delete updateData.email;
+      }
+      if (updateData.plain_password === "") {
+        delete updateData.plain_password;
+      }
+      await updateUser(currentUser.id, updateData);
+
+      // Need to handle logic for logging out and also update the ui for current user
+      handleLogout();
+      handleUpdatedClose();
     } catch (error) {
       const e = error as Error;
       console.error(e);
       throw e;
     }
-    handleClose();
   }
   return (
     <>

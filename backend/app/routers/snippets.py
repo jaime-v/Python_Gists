@@ -76,6 +76,24 @@ async def get_snippet(snippet_id: int, db: Annotated[AsyncSession, Depends(get_d
         )
     return snippet
 
+@router.get("/title/{snippet_title}", response_model=SnippetResponse)
+async def get_snippet_by_title(snippet_title: str, db: Annotated[AsyncSession, Depends(get_db)]):
+    result = await db.execute(
+        # select(models.Snippet).where(models.Snippet.id == snippet_id)
+        select(models.Snippet)
+        .options(selectinload(models.Snippet.owner))
+        .where(models.Snippet.title == snippet_title)
+    )
+    snippet = result.scalars().first()
+    if not snippet:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Snippet not found",
+        )
+    return snippet
+
+
+
 
 @router.get("", response_model=list[SnippetResponse])
 async def get_snippets(db: Annotated[AsyncSession, Depends(get_db)]):

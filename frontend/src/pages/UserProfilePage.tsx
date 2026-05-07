@@ -90,6 +90,8 @@ function UserProfilePage() {
   // useEffect will run every time the username in the path changes
   // It will get the user by username and set the profile state to be the found user, or null if not found
   // Also runs the effect if the current user changes since we need to potentially change the profile
+  // Currently a bug when currentUser changes because we will try to fetch the name again, but if that name doesn't exist it will error
+  // Doesn't affect anything I don't think, but it's a wasted API call
   useEffect(() => {
     async function getPublicUser(username: string) {
       try {

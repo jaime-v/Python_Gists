@@ -3,15 +3,28 @@
 Log of what I've done for this project
 
 ## May 6, 2026
-Started implementing the edit buttons for each field on user profile and snippets, but 
-realized that it would be super complicated and annoying, so I'm opting for just one edit 
-button that will bring up a modal to edit the entire profile/entire snippet. It's simpler and 
+
+Started implementing the edit buttons for each field on user profile and snippets, but
+realized that it would be super complicated and annoying, so I'm opting for just one edit
+button that will bring up a modal to edit the entire profile/entire snippet. It's simpler and
 probably better for the scope of this project.
 
-Created the user edit modal and it seems to be able to change user data and access the api, but 
+Created the user edit modal and it seems to be able to change user data and access the api, but
 the currentUser context stil sees the old user and won't update, so I need to look into that
 
+User edit modal is all good except for one thing. When the currentUser updates, the hook in the
+UserProfilePage is called, but only currentUser updated and the other username didn't. So it the
+effect will try to pull up the public profile of the username that was just changed, which does
+not exist, so we get an error because we try to look up the user by username but we just changed
+the user so they don't exist anymore. Obviously no issue when username is unchanged, but still.
+
+Snippet edit modal is good but there is an error that causes tearing supposedly, it's when we
+redirect from snippet edit back to snippets page, caused by the snippet details page not having
+the title anymore if we edit it -- apparently React is able to recover by rendering the entire
+root
+
 ## May 5, 2026
+
 Got the user creation page functionality done
 
 Currently struggling with rendering the public vs private user pages
@@ -19,34 +32,33 @@ Currently struggling with rendering the public vs private user pages
 Had to do a few things:
 
 1. Create a separate route to get user by username, with a different route
-    - Tried to create one route that accepted both int and str, but didn't work
-    - Ended up creating two separate routes and it seems like the best solution
-2.
-    - useEffect for running logic when search params or current user changed
+   - Tried to create one route that accepted both int and str, but didn't work
+   - Ended up creating two separate routes and it seems like the best solution
+2. - useEffect for running logic when search params or current user changed
 
-Now, I need to finish up the page by getting and displaying the user's snippets, but having 
+Now, I need to finish up the page by getting and displaying the user's snippets, but having
 struggles with that as well
 
-I need to get user by username, then get all snippets that where the owner's username matches 
-the user's username, but if I try to do models.Snippet.owner.username, I get a 500 server error 
+I need to get user by username, then get all snippets that where the owner's username matches
+the user's username, but if I try to do models.Snippet.owner.username, I get a 500 server error
 
-Getting by user id works because the snippet has the owner's id stored as well, so maybe I 
+Getting by user id works because the snippet has the owner's id stored as well, so maybe I
 should just add another foreign key for owner_username?
 
-It sounds like a bad idea though, maybe I should have the response include the id and username. 
-That way I can just query for the user object by username, get the snippets that match the user 
+It sounds like a bad idea though, maybe I should have the response include the id and username.
+That way I can just query for the user object by username, get the snippets that match the user
 id, then move along just fine
 
-Ended up just returning user id in responses and it works now. Idk how to feel about returning 
-user id though. My intuition was that id is sensitive, but I guess not since you can't really 
+Ended up just returning user id in responses and it works now. Idk how to feel about returning
+user id though. My intuition was that id is sensitive, but I guess not since you can't really
 access much with just the id. To access more sensitive information, you would need the token
 
 But google says that I should probably not be showing the user id, only using it internally
-So maybe I should be using a public_id with uuid and a separate id for internal use? I'm not 
+So maybe I should be using a public_id with uuid and a separate id for internal use? I'm not
 sure what the best method is
 
-
 ## May 4, 2026
+
 Made a basic login page with context, handling submission, form stuff, etc.
 
 Made a basic snippet creation page, but I'm not sure why my creation object is erroring...
@@ -57,12 +69,12 @@ Also I should probably make the form components controlled
 
 Functionality seems to work though
 
-I just spent 30mins trying to figure out why my sorting wasn't working, at first thinking it 
-was because my function was trying to sort the snippets without waiting for the loading state, 
+I just spent 30mins trying to figure out why my sorting wasn't working, at first thinking it
+was because my function was trying to sort the snippets without waiting for the loading state,
 so I added that, but it still didn't work, so I did a bunch of console.logs and found that the
 response object differs from the object type, so it was registering as undefined all the time.
 
-All because I decided to change the models from using snake_case to camelCase. But at least I 
+All because I decided to change the models from using snake_case to camelCase. But at least I
 know now.
 
 And the snippets display page works now which is dope.
@@ -70,30 +82,33 @@ And the snippets display page works now which is dope.
 Also got the snippet details page working a bit.
 
 ## May 3, 2026
-For some reason, manually setting the header in login to application/x-www-form-urlencoded 
-makes it send something weird and we get a 422 error, and removing the header makes it okay... 
+
+For some reason, manually setting the header in login to application/x-www-form-urlencoded
+makes it send something weird and we get a 422 error, and removing the header makes it okay...
 Weird
 
-Auth seems to work on the frontend now, just need to get token and pass it into the 
-fetch request. It feels a bit awkward copy-pasting getToken() method into every protected 
+Auth seems to work on the frontend now, just need to get token and pass it into the
+fetch request. It feels a bit awkward copy-pasting getToken() method into every protected
 route though, maybe I should improve on that somehow... I think this is where I need context
 and also service for auth
 
-I think I understand what I should be going for now, will update plan and hopefully finish the 
+I think I understand what I should be going for now, will update plan and hopefully finish the
 frontend soon
 
-Did some Auth stuff, and got the basic functionality working with hardcoded data, now I need 
+Did some Auth stuff, and got the basic functionality working with hardcoded data, now I need
 to actually do the frontend and create pages and components and stuff that use the functionality
 
 ## May 2, 2026
+
 Frontend work on calling the API
 
-Some login confusion with managing token and stuff, specifically with context and 
+Some login confusion with managing token and stuff, specifically with context and
 what Corey has in his tutorial
 
 Created some hardcoded data and buttons for testing out the API from the frontend
 
 ## April 30, 2026
+
 Trying to figure out how to use Outlet and different routes and such
 
 Updated Database Snippet model to have unique titles
@@ -103,7 +118,7 @@ snippet id, title, users by username, id, etc.
 
 Created basic Snippets display page with useReducer for filtering
 
-Probably need context/hooks for users and authentication so we can check user profiles and if 
+Probably need context/hooks for users and authentication so we can check user profiles and if
 a user is logged in
 
 Context is not contexting to other pages for some reason...

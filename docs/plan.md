@@ -28,16 +28,22 @@ useful to learn and improve the app
 
 # TODO:
 
-Create additional functions for handling inside components, based on interactivity. These will 
-differ based on component
+1. linking everything
+2. toast notification popups
+3. controlled forms
+4. styling everything on the frontend (block 1)
+5. styling everything on the frontend (block 2)
+6. styling everything on the frontend (block 3)
+7. manually testing the app
+8. deploy the app
+9. manually test the deployment
 
-e.g. Clicking the login button will set context to loading, call relevant service functions, set 
-context based on the service function returns, then re-render the UI
+in theory i can finish this week (famous last words)
 
 Goal for now is to just get this app deployed and then we can do more stuff
 
 - Manual Testing
-- Deploy 
+- Deploy
 
 More stuff:
 
@@ -51,5 +57,5 @@ Profile pictures with AWS S3 Object Storage (Corey tutorial)
 Transfer ownership of snippets
 Password management (Corey tutorial)
 Refactor?
-Experiment more with React stuff, e.g. passing children as props, expanding on custom hooks, 
+Experiment more with React stuff, e.g. passing children as props, expanding on custom hooks,
 diving more into context, etc.

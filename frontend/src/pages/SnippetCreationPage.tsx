@@ -31,10 +31,6 @@ function SnippetCreationPage() {
   const setSnippets = snippetsContext.setSnippets;
   const setSnippetsLoading = snippetsContext.setSnippetsLoading;
 
-  // Waiting function
-  const wait = (s: number) =>
-    new Promise((resolve) => setTimeout(resolve, s * 1000));
-
   // On submitting, check if we have logged in user, create SnippetCreate object from form data,
   // send it, then... idk do something else
   const handleSnippetSubmit = async (e: {
@@ -54,7 +50,6 @@ function SnippetCreationPage() {
     const snippetData: SnippetCreate = Object.fromEntries(formData.entries());
     setSnippetsLoading(true);
     try {
-      await wait(2);
       // loginUser returns the token... but we don't really need it
       const res = await createSnippet(snippetData);
       setSnippets([...snippets, res]);
@@ -83,6 +78,7 @@ function SnippetCreationPage() {
           <option value={"C#"}>C#</option>
           <option value={"Go"}>Go</option>
           <option value={"Rust"}>Rust</option>
+          <option value={"Other"}>Other</option>
         </Form.Select>
         <Form.Group controlId="snippetCreateDescription">
           <Form.Label>Snippet Description</Form.Label>

@@ -7,6 +7,7 @@ import { AuthContext } from "@context/AuthContext";
 import { getCurrentUser, loginUser, logout } from "@services";
 import { useContext } from "react";
 import { Button, Form } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 function LoginPage() {
   // I feel like there is definitely a way to do this better
   const authContext = useContext(AuthContext);
@@ -20,9 +21,7 @@ function LoginPage() {
   const loggedIn = authContext.loggedIn;
   const setLoggedIn = authContext.setLoggedIn;
 
-  // Waiting function
-  const wait = (s: number) =>
-    new Promise((resolve) => setTimeout(resolve, s * 1000));
+  const navigate = useNavigate();
 
   // On submitting login information, we want to setUserLoading to true, attempt login, then setUserLoading to false
   // If login is successful, then we can set currentUser and loggedIn
@@ -41,11 +40,11 @@ function LoginPage() {
     const formData: FormData = new FormData(e.target);
     setUserLoading(true);
     try {
-      await wait(2);
       // loginUser returns the token... but we don't really need it
       await loginUser(formData);
       setLoggedIn(true);
       setCurrentUser(await getCurrentUser());
+      navigate("/");
     } catch (error) {
       const e = error as Error;
       console.error(e);
@@ -54,7 +53,6 @@ function LoginPage() {
     }
   };
 
-  // Handling logout will be
   const handleLogout = () => {
     setUserLoading(true);
     logout();

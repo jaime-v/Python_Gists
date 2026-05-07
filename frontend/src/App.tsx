@@ -28,6 +28,12 @@ Qs:
 How to fetch from my own backend?
 How to manage login?
  *
+
+Random waiting function to test loading
+  // Waiting function
+  const wait = (s: number) =>
+    new Promise((resolve) => setTimeout(resolve, s * 1000));
+
  */
 import "./App.css";
 

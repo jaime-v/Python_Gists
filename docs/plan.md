@@ -28,15 +28,13 @@ useful to learn and improve the app
 
 # TODO:
 
-1. linking everything
-2. toast notification popups
-3. controlled forms
-4. styling everything on the frontend (block 1)
-5. styling everything on the frontend (block 2)
-6. styling everything on the frontend (block 3)
-7. manually testing the app
-8. deploy the app
-9. manually test the deployment
+1. Controlled forms
+2. Refactor
+3. Styling
+4. Debugging
+5. Manual testing dev
+6. Deploy
+7. Manual testing prod
 
 in theory i can finish this week (famous last words)
 

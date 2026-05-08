@@ -2,6 +2,20 @@
 
 Log of what I've done for this project
 
+## Errors and Bugs and stuff:
+
+1. Errors are on mount when logging in
+2. Errors when updating user's username
+3. Errors when updating snippet title
+
+## May 7, 2026
+
+Created notification component and context, now components that have the context can set notifications
+
+Styling is still awkward because I haven't done it yet
+
+Also expanded on the navbar to link the pages together
+
 ## May 6, 2026
 
 Started implementing the edit buttons for each field on user profile and snippets, but

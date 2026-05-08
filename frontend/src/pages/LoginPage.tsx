@@ -4,6 +4,7 @@
  * Page for logging in (if it wasn't obvious)
  */
 import { AuthContext } from "@context/AuthContext";
+import { NotificationContext } from "@context/NotificationContext";
 import { getCurrentUser, loginUser, logout } from "@services";
 import { useContext } from "react";
 import { Button, Form } from "react-bootstrap";
@@ -20,6 +21,13 @@ function LoginPage() {
   const setUserLoading = authContext.setUserLoading;
   const loggedIn = authContext.loggedIn;
   const setLoggedIn = authContext.setLoggedIn;
+
+  const notifContext = useContext(NotificationContext);
+  if (!notifContext) {
+    throw new Error("Failed to get Notif Context");
+  }
+  const setNotifActive = notifContext.setNotifActive;
+  const setNotifVariant = notifContext.setNotifVariant;
 
   const navigate = useNavigate();
 
@@ -45,10 +53,13 @@ function LoginPage() {
       setLoggedIn(true);
       setCurrentUser(await getCurrentUser());
       navigate("/");
+      setNotifVariant("success");
     } catch (error) {
       const e = error as Error;
       console.error(e);
+      setNotifVariant("danger");
     } finally {
+      setNotifActive(true);
       setUserLoading(false);
     }
   };

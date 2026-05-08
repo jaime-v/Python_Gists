@@ -4,6 +4,7 @@
  * Home Page if you couldn't tell
  */
 import { AuthContext } from "@context/AuthContext";
+import { NotificationContext } from "@context/NotificationContext";
 import { SnippetsContext } from "@context/SnippetsContext";
 import type {
   SnippetCreate,
@@ -100,9 +101,44 @@ function HomePage() {
     throw new Error("Failed to get auth context");
   }
   const currentUser = authContext.currentUser;
+
+  const notifContext = useContext(NotificationContext);
+  if (!notifContext) {
+    throw new Error("Failed to get notif context");
+  }
+  const setNotifActive = notifContext.setNotifActive;
+  const setNotifVariant = notifContext.setNotifVariant;
+  const setNotifText = notifContext.setNotifText;
   return (
     <>
       <h1>Homepage</h1>
+      <Button
+        onClick={() => {
+          setNotifActive(true);
+          setNotifVariant("primary");
+          setNotifText("This is a normal notification");
+        }}
+      >
+        primary notif
+      </Button>
+      <Button
+        onClick={() => {
+          setNotifActive(true);
+          setNotifVariant("danger");
+          setNotifText("This is an error notification");
+        }}
+      >
+        danger notif
+      </Button>
+      <Button
+        onClick={() => {
+          setNotifActive(true);
+          setNotifVariant("success");
+          setNotifText("This is a successful notification");
+        }}
+      >
+        success notif
+      </Button>
       <h2>Testing out services module functions</h2>
       {currentUser && (
         <h3>There is a logged in user! {currentUser.username}</h3>

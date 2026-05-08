@@ -1,32 +1,6 @@
 /**
-Components of the frontend will be:
-Header (NavBar, Website Title, Logged in User, Login/Sign out Button)
-Main (Varies depending on page)
-  Snippets Page (List/Grid of all snippets with sorting, filtering, searching, user's own snippets, Read Snippet)
-  User Profile Page (All user information + Update user information, Update/Delete User)
-  User Login Page (Login page)
-  User Creation Page (Create user)
-  User Public Page (Publicly available user information, Read User)
-  Snippet Creation Page (Form for creating a snippet and uploading, Create Snippet)
-  Snippet Modification Page (Current snippet and update snippet, Update/Delete Snippet)
-  Toast/Modal for Notifications
-Footer (Summary message)
-
-Contexts:
-(Things that should be available on different pages, but not passed as props)
-Logged in user (basically a global thing -- i think this is context, i guess i can figure it out later)
-Snippets (the data that we display on the frontend, updates on create/update/delete snippet, delete user)
-
-Hooks:
-Fetch Snippets
-Really any component that uses multiple hooks should have a custom hook
-
-Services:
-Anything that interacts with backend service, creating data for backend service, etc.
-
-Qs:
-How to fetch from my own backend?
-How to manage login?
+ * App.tsx
+ *
  *
 
 Random waiting function to test loading
@@ -51,18 +25,22 @@ import {
   Header,
   UserProfileEdit,
   SnippetDetailsEdit,
+  Notification,
 } from "@components";
 import useInitSnippets from "@hooks/useInitSnippets";
 import { SnippetsContext } from "@context/SnippetsContext";
 import { Outlet, Route, Routes } from "react-router-dom";
 import { AuthContext } from "@context/AuthContext";
 import useAuth from "@hooks/useAuth";
+import { NotificationContext } from "@context/NotificationContext";
+import useNotif from "@hooks/useNotif";
 
-function Layout() {
+function Layout({ notifActive }: { notifActive: boolean }) {
   return (
     <>
       <Header />
       <Outlet />
+      <Notification notifActive={notifActive} />
       <Footer />
     </>
   );
@@ -79,6 +57,14 @@ function App() {
     userLoading,
     setUserLoading,
   } = useAuth();
+  const {
+    notifActive,
+    setNotifActive,
+    notifVariant,
+    setNotifVariant,
+    notifText,
+    setNotifText,
+  } = useNotif();
   return (
     <>
       <AuthContext.Provider
@@ -99,21 +85,32 @@ function App() {
             setSnippetsLoading,
           }}
         >
-          <Routes>
-            <Route path="/" element={<Layout />}>
-              <Route index element={<HomePage />} />
-              <Route path="snippets" element={<SnippetsPage />} />
-              <Route path="snippet/:title" element={<SnippetDetailsPage />}>
-                <Route path="edit" element={<SnippetDetailsEdit />} />
+          <NotificationContext.Provider
+            value={{
+              setNotifActive,
+              notifVariant,
+              setNotifVariant,
+              notifText,
+              setNotifText,
+            }}
+          >
+            <Routes>
+              <Route path="/" element={<Layout notifActive={notifActive} />}>
+                <Route index element={<HomePage />} />
+                <Route path="snippets" element={<SnippetsPage />} />
+                <Route path="snippet/:title" element={<SnippetDetailsPage />}>
+                  <Route path="edit" element={<SnippetDetailsEdit />} />
+                </Route>
+                <Route path="create" element={<SnippetCreationPage />} />
+                <Route path="login" element={<LoginPage />} />
+                <Route path="register" element={<CreateUserPage />} />
+                <Route path="user/:username" element={<UserProfilePage />}>
+                  <Route path="edit" element={<UserProfileEdit />} />
+                </Route>
+                <Route path="*" element={<h1>404 Page</h1>} />
               </Route>
-              <Route path="create" element={<SnippetCreationPage />} />
-              <Route path="login" element={<LoginPage />} />
-              <Route path="register" element={<CreateUserPage />} />
-              <Route path="user/:username" element={<UserProfilePage />}>
-                <Route path="edit" element={<UserProfileEdit />} />
-              </Route>
-            </Route>
-          </Routes>
+            </Routes>
+          </NotificationContext.Provider>
         </SnippetsContext.Provider>
       </AuthContext.Provider>
     </>

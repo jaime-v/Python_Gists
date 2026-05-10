@@ -11,6 +11,11 @@ export type Token = {
   token_type: string;
 };
 
+export type LoginForm = {
+  username: string;
+  password: string;
+};
+
 // Context for logged in user
 export type AuthContextType = {
   currentUser: UserPrivate | null;

@@ -29,12 +29,12 @@ useful to learn and improve the app
 # TODO:
 
 1. Controlled forms
-2. Refactor
-3. Styling
-4. Debugging
-5. Manual testing dev
-6. Deploy
-7. Manual testing prod
+2. Styling
+3. Debugging
+4. Manual testing dev
+5. Deploy
+6. Manual testing prod
+7. Refactor
 
 in theory i can finish this week (famous last words)
 
@@ -57,3 +57,35 @@ Password management (Corey tutorial)
 Refactor?
 Experiment more with React stuff, e.g. passing children as props, expanding on custom hooks,
 diving more into context, etc.
+Handle file uploads
+Create a mini text editor
+
+## Styling
+
+- App Header
+  - NavBar (Links on left, profile on right)
+- App Footer
+  - Standard footer stuff
+
+- Create
+  - Title
+  - Dropdown for Language
+  - Description box
+  - Big text area for code
+
+- Discover (Snippets display)
+  - Display Header
+  - Profile + Snippet Display
+    - Profile, Title, Description, Creation Date all in one header
+    - Big text area for code
+
+- Profile Pages
+  - 3/4 of the page is snippet, 1/4 is profile description
+  - Profiles have a summary/description (might want to add that)
+
+- Page itself
+  - Fluid container (expands to fill the page)
+  - Border lines between gists header and gists display
+  - App header has different background
+  - Create is the home page
+  - Logout is in the profile dropdown menu

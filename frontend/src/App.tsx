@@ -34,15 +34,18 @@ import { AuthContext } from "@context/AuthContext";
 import useAuth from "@hooks/useAuth";
 import { NotificationContext } from "@context/NotificationContext";
 import useNotif from "@hooks/useNotif";
+import { Container } from "react-bootstrap";
 
 function Layout({ notifActive }: { notifActive: boolean }) {
   return (
-    <>
+    <Container fluid className="d-flex flex-column min-vh-100">
       <Header />
-      <Outlet />
-      <Notification notifActive={notifActive} />
+      <div className="flex-grow-1">
+        <Outlet />
+        <Notification notifActive={notifActive} />
+      </div>
       <Footer />
-    </>
+    </Container>
   );
 }
 
@@ -66,54 +69,52 @@ function App() {
     setNotifText,
   } = useNotif();
   return (
-    <>
-      <AuthContext.Provider
+    <AuthContext.Provider
+      value={{
+        currentUser,
+        setCurrentUser,
+        loggedIn,
+        setLoggedIn,
+        userLoading,
+        setUserLoading,
+      }}
+    >
+      <SnippetsContext.Provider
         value={{
-          currentUser,
-          setCurrentUser,
-          loggedIn,
-          setLoggedIn,
-          userLoading,
-          setUserLoading,
+          snippets,
+          setSnippets,
+          snippetsLoading,
+          setSnippetsLoading,
         }}
       >
-        <SnippetsContext.Provider
+        <NotificationContext.Provider
           value={{
-            snippets,
-            setSnippets,
-            snippetsLoading,
-            setSnippetsLoading,
+            setNotifActive,
+            notifVariant,
+            setNotifVariant,
+            notifText,
+            setNotifText,
           }}
         >
-          <NotificationContext.Provider
-            value={{
-              setNotifActive,
-              notifVariant,
-              setNotifVariant,
-              notifText,
-              setNotifText,
-            }}
-          >
-            <Routes>
-              <Route path="/" element={<Layout notifActive={notifActive} />}>
-                <Route index element={<HomePage />} />
-                <Route path="snippets" element={<SnippetsPage />} />
-                <Route path="snippet/:title" element={<SnippetDetailsPage />}>
-                  <Route path="edit" element={<SnippetDetailsEdit />} />
-                </Route>
-                <Route path="create" element={<SnippetCreationPage />} />
-                <Route path="login" element={<LoginPage />} />
-                <Route path="register" element={<CreateUserPage />} />
-                <Route path="user/:username" element={<UserProfilePage />}>
-                  <Route path="edit" element={<UserProfileEdit />} />
-                </Route>
-                <Route path="*" element={<h1>404 Page</h1>} />
+          <Routes>
+            <Route path="/" element={<Layout notifActive={notifActive} />}>
+              <Route index element={<HomePage />} />
+              <Route path="snippets" element={<SnippetsPage />} />
+              <Route path="snippet/:title" element={<SnippetDetailsPage />}>
+                <Route path="edit" element={<SnippetDetailsEdit />} />
               </Route>
-            </Routes>
-          </NotificationContext.Provider>
-        </SnippetsContext.Provider>
-      </AuthContext.Provider>
-    </>
+              <Route path="create" element={<SnippetCreationPage />} />
+              <Route path="login" element={<LoginPage />} />
+              <Route path="register" element={<CreateUserPage />} />
+              <Route path="user/:username" element={<UserProfilePage />}>
+                <Route path="edit" element={<UserProfileEdit />} />
+              </Route>
+              <Route path="*" element={<h1>404 Page</h1>} />
+            </Route>
+          </Routes>
+        </NotificationContext.Provider>
+      </SnippetsContext.Provider>
+    </AuthContext.Provider>
   );
 }
 

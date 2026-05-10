@@ -4,9 +4,10 @@
  * Modal for editing a snippet
  */
 
+import { NotificationContext } from "@context/NotificationContext";
 import type { Snippet, SnippetUpdate, UserPrivate } from "@models";
 import { getSnippets, updateSnippetPartial } from "@services";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 
@@ -30,6 +31,14 @@ function SnippetDetailsEdit() {
       "[SnippetDetails.tsx] - Couldn't find snippet with given title",
     );
   }
+
+  const notifContext = useContext(NotificationContext);
+  if (!notifContext) {
+    throw new Error("Failed to get Notif Context");
+  }
+  const setNotifActive = notifContext.setNotifActive;
+  const setNotifVariant = notifContext.setNotifVariant;
+  const setNotifText = notifContext.setNotifText;
 
   const initialData: SnippetUpdate = {
     title: snippet.title,
@@ -97,11 +106,17 @@ function SnippetDetailsEdit() {
       const res = await getSnippets();
       setSnippets(res);
       setSnippetsLoading(false);
+      setNotifVariant("success");
+      setNotifText("Updated snippet, redirecting back to snippets page");
       handleUpdatedClose();
     } catch (error) {
       const e = error as Error;
       console.error(e);
+      setNotifVariant("danger");
+      setNotifText("Failed to update snippet");
       throw e;
+    } finally {
+      setNotifActive(true);
     }
   };
   console.log("Updated data: ", updatedData);

@@ -5,11 +5,11 @@
  */
 function Footer() {
   return (
-    <footer>
-      <h2>
+    <footer className="mt-auto">
+      <small>
         Full-Stack App with React TypeScript Frontend, FastAPI Python Backend,
         PostgreSQL Database
-      </h2>
+      </small>
     </footer>
   );
 }

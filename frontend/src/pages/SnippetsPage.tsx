@@ -8,6 +8,7 @@
 import { SnippetsHeader, SnippetsMain } from "@components";
 import { useReducer } from "react";
 import type { DisplayOptionsState, DisplayOptionsAction } from "@models";
+import { Container } from "react-bootstrap";
 
 const initialDisplayState: DisplayOptionsState = {
   searchFilter: "",
@@ -43,8 +44,13 @@ function SnippetsPage() {
   );
   return (
     <>
-      <SnippetsHeader displayDispatch={displayDispatch} />
-      <SnippetsMain displayState={displayState} />
+      <h1>Snippets Page</h1>
+      <Container fluid>
+        <SnippetsHeader displayDispatch={displayDispatch} />
+      </Container>
+      <Container>
+        <SnippetsMain displayState={displayState} />
+      </Container>
     </>
   );
 }

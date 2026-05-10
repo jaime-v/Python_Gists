@@ -7,8 +7,16 @@
  */
 
 import { AuthContext } from "@context/AuthContext";
+import { NotificationContext } from "@context/NotificationContext";
+import { SnippetsContext } from "@context/SnippetsContext";
 import type { UserPublic, UserPrivate, Snippet } from "@models";
-import { getUserByUsername, getUserSnippetsByUsername } from "@services";
+import {
+  deleteUser,
+  getSnippets,
+  getUserByUsername,
+  getUserSnippetsByUsername,
+  logout,
+} from "@services";
 import { useContext, useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import { Link, Outlet, useParams } from "react-router-dom";
@@ -37,7 +45,11 @@ function UserPublicPage({
       <h2>Snippets would go here</h2>
       <ul>
         {snippets.map((snippet) => {
-          return <li key={snippet.id}>{snippet.title}</li>;
+          return (
+            <li key={snippet.id}>
+              <Link to={`/snippet/${snippet.title}`}>{snippet.title}</Link>
+            </li>
+          );
         })}
       </ul>
     </>
@@ -51,6 +63,54 @@ function UserPrivatePage({
   user: UserPrivate;
   snippets: Snippet[];
 }) {
+  const authContext = useContext(AuthContext);
+  if (!authContext) {
+    throw new Error("Failed to get Auth Context");
+  }
+  const setUserLoading = authContext.setUserLoading;
+  const setLoggedIn = authContext.setLoggedIn;
+  const setCurrentUser = authContext.setCurrentUser;
+
+  const notifContext = useContext(NotificationContext);
+  if (!notifContext) {
+    throw new Error("Failed to get Auth Context");
+  }
+  const setNotifVariant = notifContext.setNotifVariant;
+  const setNotifText = notifContext.setNotifText;
+  const setNotifActive = notifContext.setNotifActive;
+
+  const snippetsContext = useContext(SnippetsContext);
+  if (!snippetsContext) {
+    throw new Error("Failed to get Snippets Context");
+  }
+  const setSnippetsLoading = snippetsContext.setSnippetsLoading;
+  const setSnippets = snippetsContext.setSnippets;
+  const handleLogout = () => {
+    setUserLoading(true);
+    logout();
+    setNotifVariant("success");
+    setNotifText("Logged out");
+    setNotifActive(true);
+    setLoggedIn(false);
+    setCurrentUser(null);
+    setUserLoading(false);
+  };
+  const handleDelete = async () => {
+    // Deleting a user also deletes all of their snippets, so we need to fetch those again
+    setUserLoading(true);
+    setSnippetsLoading(true);
+    await deleteUser(user.id);
+    logout();
+    const snippets = await getSnippets();
+    setSnippets(snippets);
+    setNotifVariant("success");
+    setNotifText("Deleted user");
+    setNotifActive(true);
+    setLoggedIn(false);
+    setCurrentUser(null);
+    setUserLoading(false);
+    setSnippetsLoading(false);
+  };
   return (
     <>
       <h1>
@@ -62,9 +122,19 @@ function UserPrivatePage({
       </Button>
       <ul>
         {snippets.map((snippet) => {
-          return <li key={snippet.id}>{snippet.title}</li>;
+          return (
+            <li key={snippet.id}>
+              <Link to={`/snippet/${snippet.title}`}>{snippet.title}</Link>
+            </li>
+          );
         })}
       </ul>
+      <Button variant="primary" onClick={handleLogout}>
+        Log out
+      </Button>
+      <Button variant="danger" onClick={handleDelete}>
+        Delete User: {user.username}
+      </Button>
       {/* Also include an outlet for the edit modal */}
       <Outlet />
     </>

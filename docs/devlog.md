@@ -4,9 +4,28 @@ Log of what I've done for this project
 
 ## Errors and Bugs and stuff:
 
-1. Errors are on mount when logging in
+1. Errors are on mount when logging in (I think it's after a token expires)
 2. Errors when updating user's username
 3. Errors when updating snippet title
+4. Tons of stuff is copy pasted, especially with all context functions, navigate, and buttons
+
+## May 9, 2026
+
+More notifications in areas that should be trigger notifications
+
+Added some navigation on button clicks that didn't have before
+
+Implemented the delete user/snippet because I forgot to
+
+Used Bootstrap for layout
+
+## May 8, 2026
+
+Added notification popups to actions
+
+Changed uncontrolled forms to controlled forms
+
+Changed the plan to prioritize deploying an ugly project soon instead of a cleaner project later
 
 ## May 7, 2026
 

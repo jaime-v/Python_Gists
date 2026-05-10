@@ -6,15 +6,17 @@
 import { SnippetsContext } from "@context/SnippetsContext";
 import type { Snippet, DisplayOptionsState } from "@models";
 import { useContext } from "react";
-import { Accordion, Button, Card } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { Accordion, Button, Card, Col, Row } from "react-bootstrap";
+import { Link, useNavigate } from "react-router-dom";
 
 function MainCards({ snippets }: { snippets: Snippet[] }) {
   return (
     <main>
-      {snippets.map((snippet) => {
-        return <SnippetCard key={snippet.id} snippet={snippet} />;
-      })}
+      <Row>
+        {snippets.map((snippet) => {
+          return <SnippetCard key={snippet.id} snippet={snippet} />;
+        })}
+      </Row>
     </main>
   );
 }
@@ -36,32 +38,44 @@ function SnippetCard({ snippet }: { snippet: Snippet }) {
     navigate(`/snippet/${snippet.title}`);
   };
   return (
-    <Card>
-      <Card.Body>
-        <Card.Title>{snippet.title}</Card.Title>
-        <Card.Text>{snippet.description}</Card.Text>
-      </Card.Body>
-      <Card.Footer>
-        <Button variant="success" onClick={handleNavigate}>
-          More Details
-        </Button>
-      </Card.Footer>
-    </Card>
+    <Col xs={12} className="mb-3">
+      <Card>
+        <Card.Body>
+          <Card.Title>
+            {snippet.title} -- {snippet.language} <br />
+            <Link to={`/user/${snippet.owner.username}`}>
+              {snippet.owner.username}
+            </Link>
+          </Card.Title>
+          <Card.Text>{snippet.description}</Card.Text>
+        </Card.Body>
+        <Card.Footer>
+          <Button variant="success" onClick={handleNavigate}>
+            More Details
+          </Button>
+        </Card.Footer>
+      </Card>
+    </Col>
   );
 }
 
 function SnippetListing({ snippet }: { snippet: Snippet }) {
   const navigate = useNavigate();
-  const handleNavigate = () => {
+  const navigateToDetails = () => {
     navigate(`/snippet/${snippet.title}`);
   };
   return (
     <Accordion.Item eventKey={snippet.id.toString()}>
-      <Accordion.Header>{snippet.title}</Accordion.Header>
+      <Accordion.Header>
+        {snippet.title} -- {snippet.language} --&ensp;
+        <Link to={`/user/${snippet.owner.username}`}>
+          {snippet.owner.username}
+        </Link>
+      </Accordion.Header>
       <Accordion.Body>
         {snippet.description}
         <br />
-        <Button variant="success" onClick={handleNavigate}>
+        <Button variant="success" onClick={navigateToDetails}>
           More Details
         </Button>
       </Accordion.Body>
@@ -137,7 +151,6 @@ function SnippetsMain({ displayState }: { displayState: DisplayOptionsState }) {
 
   return (
     <>
-      <h1>Snippets Page</h1>
       {displayState.displayOption === "grid" && (
         <MainCards snippets={displaySnippets} />
       )}

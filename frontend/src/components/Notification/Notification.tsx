@@ -6,13 +6,11 @@
  * The way I think this should work is that the Notification is just not visible most of the time
  *
  * Then when user takes action, we call a function that sets active state to true
- *
- * So maybe this should just be a context and we can pass setActive around
  */
 
 import { NotificationContext } from "@context/NotificationContext";
 import { useContext } from "react";
-import { Button, Toast, ToastContainer } from "react-bootstrap";
+import { Toast, ToastContainer } from "react-bootstrap";
 
 function Notification({ notifActive }: { notifActive: boolean }) {
   const notifContext = useContext(NotificationContext);
@@ -36,7 +34,6 @@ function Notification({ notifActive }: { notifActive: boolean }) {
           <Toast.Body>{notifText}</Toast.Body>
         </Toast>
       </ToastContainer>
-      <Button onClick={() => setNotifActive(true)}>Activate</Button>
     </>
   );
 }

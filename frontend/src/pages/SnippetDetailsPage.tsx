@@ -8,19 +8,65 @@
  *
  */
 import { AuthContext } from "@context/AuthContext";
+import { NotificationContext } from "@context/NotificationContext";
 import { SnippetsContext } from "@context/SnippetsContext";
+import type { Snippet } from "@models";
+import { deleteSnippet, getSnippets } from "@services";
 import { useContext } from "react";
-import { Button } from "react-bootstrap";
-import { Link, Outlet, useParams } from "react-router-dom";
+import { Button, Container, Row } from "react-bootstrap";
+import { Link, Outlet, useNavigate, useParams } from "react-router-dom";
 
-function OwnerButtons({ title }: { title: string }) {
+function OwnerButtons({
+  title,
+  snippet,
+  setSnippets,
+  setSnippetsLoading,
+}: {
+  title: string;
+  snippet: Snippet;
+  setSnippets: React.Dispatch<React.SetStateAction<Snippet[]>>;
+  setSnippetsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
+  const notifContext = useContext(NotificationContext);
+  if (!notifContext) {
+    throw new Error("Failed to get Notif Context");
+  }
+  const setNotifActive = notifContext.setNotifActive;
+  const setNotifVariant = notifContext.setNotifVariant;
+  const setNotifText = notifContext.setNotifText;
+  const navigate = useNavigate();
+  const handleUpdatedClose = () => {
+    navigate("/snippets");
+  };
+  const handleDelete = async () => {
+    setSnippetsLoading(true);
+    try {
+      // Delete snippet, fetch snippets, set snippets
+      await deleteSnippet(snippet.id);
+      const snippets = await getSnippets();
+      setSnippets(snippets);
+      setNotifVariant("success");
+      setNotifText(`Deleted Snippet: "${snippet.title}"`);
+      handleUpdatedClose();
+    } catch (error) {
+      const e = error as Error;
+      console.error(e);
+      setNotifVariant("danger");
+      setNotifText(e.message);
+    } finally {
+      setNotifActive(true);
+      setSnippetsLoading(false);
+    }
+  };
   return (
-    <>
+    <Row>
       <Button variant="warning">
         <Link to={`/snippet/${title}/edit`}>Edit</Link>
       </Button>
-      <Button variant="danger">Delete</Button>
-    </>
+      <Button variant="danger" onClick={handleDelete}>
+        Delete
+      </Button>
+    </Row>
   );
 }
 
@@ -58,9 +104,12 @@ function SnippetDetailsPage() {
     );
   }
   return (
-    <>
+    <Container>
       <h1>
-        {snippet.title} Details Page by {snippet.owner.username}
+        {snippet.title} Details Page by{" "}
+        <Link to={`/user/${snippet.owner.username}`}>
+          {snippet.owner.username}
+        </Link>
       </h1>
       <h2>{snippet.language}</h2>
       <h3>{snippet.description}</h3>
@@ -72,13 +121,18 @@ function SnippetDetailsPage() {
       {currentUser &&
         snippet.owner.username.toLowerCase() ===
           currentUser.username.toLowerCase() && (
-          <OwnerButtons title={snippet.title} />
+          <OwnerButtons
+            title={snippet.title}
+            snippet={snippet}
+            setSnippets={setSnippets}
+            setSnippetsLoading={setSnippetsLoading}
+          />
         )}
       {/* Outlet for the edit modal */}
       <Outlet
         context={{ snippets, setSnippets, setSnippetsLoading, currentUser }}
       />
-    </>
+    </Container>
   );
 }
 

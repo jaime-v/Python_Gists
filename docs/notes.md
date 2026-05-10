@@ -77,10 +77,10 @@ Not using .env directly because pydantic-settings is supposedly better
 403 means authenticated, but cannot take an action
 It's the difference between "you need to log in" and "you are not allowed to do this"
 
-Changed the backend schemas and frontend types to return the user id on responses, but I think 
+Changed the backend schemas and frontend types to return the user id on responses, but I think
 I should be using UUIDs for this and keep the autoincrementing id for internal use
 
-Should I even be worrying about this in a random personal project? Probably don't need to, but 
+Should I even be worrying about this in a random personal project? Probably don't need to, but
 would be good practice to do it
 
 ## Database things
@@ -214,16 +214,16 @@ Can put prefixes inside main rather than the router, I like the prefix inside th
 
 ## Routing
 
-If multiple routes have the same path and method 
+If multiple routes have the same path and method
 e.g. two paths with /{variable}, then FastAPI will try to execute the first one, no matter what
 
-If there are two routes with the same path and the same method, you need to create a separate 
+If there are two routes with the same path and the same method, you need to create a separate
 route with a different path
 
-In this case, we need to get user by user id with /{user_id} and also a different path to get 
+In this case, we need to get user by user id with /{user_id} and also a different path to get
 user by username with /username/{user_username}
 
-If we don't separate them, then it will always default to the first one resulting in 422 
+If we don't separate them, then it will always default to the first one resulting in 422
 (name in id field) or 404 (id in name field)
 
 ## Pagination
@@ -284,7 +284,7 @@ But that's kind of cringe honestly -- manually running things -\_-
 - Later projects should use the new stuff:
 - Migrate to postgresql 18, "psycopg[binary]" instead of psycopg2-binary
 - Also use uv instead of pip
-- Bunch of other stuff
+- Supabase Auth instead of just manually doing it is probably a good idea for future projects
 
 testuser
 user@example.com
@@ -292,8 +292,9 @@ testpass1
 id == 2
 
 ## React Stuff
-Context is like having an object or set of values taht can be passed around the app, without 
-needing to prop drill. We are basically wrapping a section of the application with values 
+
+Context is like having an object or set of values taht can be passed around the app, without
+needing to prop drill. We are basically wrapping a section of the application with values
 and we can get those values with useContext()
 
 Custom Hooks are reusable pieces of logic in the application
@@ -304,38 +305,39 @@ Really it's just a bunch of notes in the form of comments, maybe I should move t
 
 ## useEffect in UserProfilePage (Rendering different profiles)
 
-When creating the UserProfilePage, we broke down the logic of what is supposed to happen in 
+When creating the UserProfilePage, we broke down the logic of what is supposed to happen in
 the component, and also figured out when it was supposed to happen.
 
-Ended up with a useEffect that would check if currentUser is the profile we want, if not then 
-attempt to fetch the user by username, and if there is no user, then set profile to null. This 
-effect should be rerun every time the username in search params changes, or when the currentUser 
-changes. Struggled on this a lot because... i'm not sure honestly. It seems so obvious now 
+Ended up with a useEffect that would check if currentUser is the profile we want, if not then
+attempt to fetch the user by username, and if there is no user, then set profile to null. This
+effect should be rerun every time the username in search params changes, or when the currentUser
+changes. Struggled on this a lot because... i'm not sure honestly. It seems so obvious now
 looking back at it
 
 ### THOUGHT PROCESS ABOUT CONTEXT, SERVICES, AND HOOKS:
-I need to find a way to pass the current user around, and also track if there is a user logged 
-in. Services should be handling the login, logout, get current user, etc. functions. Context
-is for the components, so it should be separate. Components will see context and render 
-differently based on if there is a user logged in or not. Other service modules don't use
-context, they just import the other services... 
 
-So that means context and service actually don't interact with each other at all? Not exactly 
-because I create my snippets UI state using my init hook, then I pass those values around 
-with context. So context is just saying "component has these values if it needs them", custom 
+I need to find a way to pass the current user around, and also track if there is a user logged
+in. Services should be handling the login, logout, get current user, etc. functions. Context
+is for the components, so it should be separate. Components will see context and render
+differently based on if there is a user logged in or not. Other service modules don't use
+context, they just import the other services...
+
+So that means context and service actually don't interact with each other at all? Not exactly
+because I create my snippets UI state using my init hook, then I pass those values around
+with context. So context is just saying "component has these values if it needs them", custom
 hooks (at least for initializing) are saying "we create the context values here", and services
-are saying "here's how the logic works". So I should start off by creating the state of the 
-current logged in user (null), and the logged in status (false). This is context. Then we can 
-initialize with a custom hook, if there is a token already present. Then any event that calls 
-the AuthService should then modify the context value we have. So services shouldn't modify 
-context, but context depends on values that the service returns, it's just managed with things 
+are saying "here's how the logic works". So I should start off by creating the state of the
+current logged in user (null), and the logged in status (false). This is context. Then we can
+initialize with a custom hook, if there is a token already present. Then any event that calls
+the AuthService should then modify the context value we have. So services shouldn't modify
+context, but context depends on values that the service returns, it's just managed with things
 like setState.
 
 I probably could have just reviewed the code I had for Snippets to figure out what I was doing
 but I guess it worked out
 
-
 ## TypeScript
+
 keyof typeof is used for extracting keys of an object
 
 `<string> as keyof type of <object>`
@@ -347,14 +349,16 @@ up a bit, but it seems good to use. Just in general, I can probably just useStat
 object, but I haven't used useReducer so I thought I would do it
 
 ## Frontend and Backend
+
 Should I be sending user id in UserPublic responses? probably not
 
-Make sure Frontend and Backend types/models/whatever have exact same naming, or you manually 
+Make sure Frontend and Backend types/models/whatever have exact same naming, or you manually
 translate between the response and the objects we want
 
 ### THOUGHT PROCESS ABOUT FETCHING USER BY USERNAME AND DISPLAYING ON FRONTEND
-My current thought process is to get the user profile based on username. If the current user has 
-the same username as the one we are searching for (user is looking at their own profile), then 
-we render the private profile page. Otherwise, we render the public profile page of the target 
-user. Problem is that I don't have a list of users to grab from, so I can't just filter. So I 
+
+My current thought process is to get the user profile based on username. If the current user has
+the same username as the one we are searching for (user is looking at their own profile), then
+we render the private profile page. Otherwise, we render the public profile page of the target
+user. Problem is that I don't have a list of users to grab from, so I can't just filter. So I
 need to fetch the user from the API by username and also fetch the snippets once I have the user.

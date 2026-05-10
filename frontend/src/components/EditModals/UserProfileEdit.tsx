@@ -5,6 +5,7 @@
  */
 
 import { AuthContext } from "@context/AuthContext";
+import { NotificationContext } from "@context/NotificationContext";
 import type { UserUpdate } from "@models";
 import { logout, updateUser } from "@services";
 import { useContext, useState } from "react";
@@ -37,6 +38,15 @@ function UserProfileEdit() {
   if (currentUser.username != params.username) {
     throw new Error("Hey you're not allowed to be here");
   }
+
+  const notifContext = useContext(NotificationContext);
+  if (!notifContext) {
+    throw new Error("Failed to get Notif Context");
+  }
+  const setNotifActive = notifContext.setNotifActive;
+  const setNotifVariant = notifContext.setNotifVariant;
+  const setNotifText = notifContext.setNotifText;
+
   const navigate = useNavigate();
   const handleClose = () => {
     // Navigate to user profile
@@ -95,10 +105,16 @@ function UserProfileEdit() {
       // Need to handle logic for logging out and also update the ui for current user
       handleLogout();
       handleUpdatedClose();
+      setNotifVariant("success");
+      setNotifText("Updated user, redirecting to home");
     } catch (error) {
       const e = error as Error;
       console.error(e);
+      setNotifVariant("danger");
+      setNotifText("Failed to update user");
       throw e;
+    } finally {
+      setNotifActive(true);
     }
   }
   return (

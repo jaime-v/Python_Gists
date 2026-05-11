@@ -16,7 +16,6 @@ import {
   SnippetCreationPage,
   SnippetsPage,
   SnippetDetailsPage,
-  HomePage,
   UserProfilePage,
   CreateUserPage,
 } from "@pages";
@@ -98,7 +97,7 @@ function App() {
         >
           <Routes>
             <Route path="/" element={<Layout notifActive={notifActive} />}>
-              <Route index element={<HomePage />} />
+              <Route index element={<SnippetsPage />} />
               <Route path="snippets" element={<SnippetsPage />} />
               <Route path="snippet/:title" element={<SnippetDetailsPage />}>
                 <Route path="edit" element={<SnippetDetailsEdit />} />

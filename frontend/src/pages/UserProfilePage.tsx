@@ -18,19 +18,32 @@ import {
   logout,
 } from "@services";
 import { useContext, useEffect, useState } from "react";
-import { Button } from "react-bootstrap";
-import { Link, Outlet, useParams } from "react-router-dom";
+import { Button, Card, Col, Container, Row } from "react-bootstrap";
+import { Outlet, useNavigate, useParams } from "react-router-dom";
 
-/*
-How does this even work
-We get username from search params
-Get auth context for current user
-We don't have users stored though, so it's not like i can fetch from context
-But I don't think i want to do that anyway
-if the currentUser.username is the same as username, then we can get current user (no need to fetch)
-if the usernames are not the same, then we get user
-looks like we will need a loading state then fetch
-*/
+function SnippetCard({ snippet }: { snippet: Snippet }) {
+  const navigate = useNavigate();
+  const handleNavigate = () => {
+    navigate(`/snippet/${snippet.title}`);
+  };
+  return (
+    <Col xs={12} className="mb-3">
+      <Card>
+        <Card.Body>
+          <Card.Title>
+            {snippet.title} -- {snippet.language}
+          </Card.Title>
+          <Card.Text>{snippet.description}</Card.Text>
+        </Card.Body>
+        <Card.Footer>
+          <Button variant="success" onClick={handleNavigate}>
+            More Details
+          </Button>
+        </Card.Footer>
+      </Card>
+    </Col>
+  );
+}
 
 function UserPublicPage({
   user,
@@ -40,19 +53,22 @@ function UserPublicPage({
   snippets: Snippet[];
 }) {
   return (
-    <>
-      <h1>{user.username}</h1>
-      <h2>Snippets would go here</h2>
-      <ul>
-        {snippets.map((snippet) => {
-          return (
-            <li key={snippet.id}>
-              <Link to={`/snippet/${snippet.title}`}>{snippet.title}</Link>
-            </li>
-          );
-        })}
-      </ul>
-    </>
+    <Container className="d-flex flex-column flex-md-row">
+      <div className="d-flex flex-column col-md-3 col-12 px-3">
+        <Row>
+          <h1>{user.username}</h1>
+        </Row>
+      </div>
+      <div className="d-flex flex-column col-9 col-md-9 col-12 px-3">
+        <Row className="mt-3">
+          {snippets.map((snippet) => {
+            return <SnippetCard key={snippet.id} snippet={snippet} />;
+          })}
+        </Row>
+      </div>
+      {/* Also include an outlet for the edit modal */}
+      <Outlet />
+    </Container>
   );
 }
 
@@ -63,6 +79,7 @@ function UserPrivatePage({
   user: UserPrivate;
   snippets: Snippet[];
 }) {
+  const navigate = useNavigate();
   const authContext = useContext(AuthContext);
   if (!authContext) {
     throw new Error("Failed to get Auth Context");
@@ -112,32 +129,39 @@ function UserPrivatePage({
     setSnippetsLoading(false);
   };
   return (
-    <>
-      <h1>
-        {user.username} -- {user.email}
-      </h1>
-      <h2>Snippets would go here</h2>
-      <Button variant="warning">
-        <Link to={`/user/${user.username}/edit`}>Edit Profile</Link>
-      </Button>
-      <ul>
-        {snippets.map((snippet) => {
-          return (
-            <li key={snippet.id}>
-              <Link to={`/snippet/${snippet.title}`}>{snippet.title}</Link>
-            </li>
-          );
-        })}
-      </ul>
-      <Button variant="primary" onClick={handleLogout}>
-        Log out
-      </Button>
-      <Button variant="danger" onClick={handleDelete}>
-        Delete User: {user.username}
-      </Button>
+    <Container className="d-flex flex-column flex-md-row">
+      <div className="d-flex flex-column col-md-3 col-12 px-3">
+        <Row>
+          <h1>{user.username}</h1>
+          <h2>{user.email}</h2>
+        </Row>
+        <Row>
+          <Button
+            variant="warning"
+            onClick={() => {
+              navigate(`/user/${user.username}/edit`);
+            }}
+          >
+            Edit Profile
+          </Button>
+          <Button variant="primary" onClick={handleLogout}>
+            Log out
+          </Button>
+          <Button variant="danger" onClick={handleDelete}>
+            Delete User: {user.username}
+          </Button>
+        </Row>
+      </div>
+      <div className="d-flex flex-column col-9 col-md-9 col-12 px-3">
+        <Row className="mt-3">
+          {snippets.map((snippet) => {
+            return <SnippetCard key={snippet.id} snippet={snippet} />;
+          })}
+        </Row>
+      </div>
       {/* Also include an outlet for the edit modal */}
       <Outlet />
-    </>
+    </Container>
   );
 }
 

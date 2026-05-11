@@ -11,7 +11,7 @@ import { SnippetsContext } from "@context/SnippetsContext";
 import type { SnippetCreate } from "@models";
 import { createSnippet, getToken } from "@services";
 import { useContext, useState } from "react";
-import { Button, Container, Form } from "react-bootstrap";
+import { Button, Container, Form, Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 function SnippetCreationPage() {
   const authContext = useContext(AuthContext);
@@ -111,59 +111,72 @@ function SnippetCreationPage() {
     <Container>
       <h1>Snippet Creation Page</h1>
       <Form onSubmit={handleSnippetSubmit}>
-        <Form.Group controlId="snippetCreateTitle">
-          <Form.Label>Snippet Title</Form.Label>
-          <Form.Control
-            type="text"
-            name="title"
-            placeholder="Title..."
-            value={createSnippetForm.title}
-            onChange={handleInputChange}
-          />
-        </Form.Group>
-        <label htmlFor="snippetCreateLanguage">Snippet Language</label>
-        <Form.Select
-          id="snippetCreateLanguage"
-          name="language"
-          value={createSnippetForm.language}
-          onChange={handleSelectChange}
-        >
-          <option value={"Python"}>Python</option>
-          <option value={"Java"}>Java</option>
-          <option value={"C++"}>C++</option>
-          <option value={"TypeScript/JavaScript"}>TypeScript/JavaScript</option>
-          <option value={"C"}>C</option>
-          <option value={"C#"}>C#</option>
-          <option value={"Go"}>Go</option>
-          <option value={"Rust"}>Rust</option>
-          <option value={"Other"}>Other</option>
-        </Form.Select>
-        <Form.Group controlId="snippetCreateDescription">
-          <Form.Label>Snippet Description</Form.Label>
-          <Form.Control
-            type="text"
-            name="description"
-            placeholder="Description..."
-            value={createSnippetForm.description}
-            onChange={handleInputChange}
-          />
-        </Form.Group>
-        <Form.Group controlId="snippetCreateCode">
-          <Form.Label>Snippet Code</Form.Label>
-          <Form.Control
-            type="text"
-            name="code"
-            placeholder="Code..."
-            value={createSnippetForm.code}
-            onChange={handleInputChange}
-          />
-        </Form.Group>
-        <Button variant="primary" type="submit">
-          Create
-        </Button>
-        <Button variant="secondary" onClick={handleInputReset}>
-          Reset
-        </Button>
+        <Row className="mt-3">
+          <Form.Group controlId="snippetCreateTitle">
+            <Form.Label>Snippet Title</Form.Label>
+            <Form.Control
+              type="text"
+              name="title"
+              placeholder="Title..."
+              value={createSnippetForm.title}
+              onChange={handleInputChange}
+            />
+          </Form.Group>
+        </Row>
+        <Row className="mt-3">
+          <label htmlFor="snippetCreateLanguage">Snippet Language</label>
+          <Form.Select
+            id="snippetCreateLanguage"
+            name="language"
+            value={createSnippetForm.language}
+            onChange={handleSelectChange}
+          >
+            <option value={"Python"}>Python</option>
+            <option value={"Java"}>Java</option>
+            <option value={"C++"}>C++</option>
+            <option value={"TypeScript/JavaScript"}>
+              TypeScript/JavaScript
+            </option>
+            <option value={"C"}>C</option>
+            <option value={"C#"}>C#</option>
+            <option value={"Go"}>Go</option>
+            <option value={"Rust"}>Rust</option>
+            <option value={"Other"}>Other</option>
+          </Form.Select>
+        </Row>
+        <Row className="mt-3">
+          <Form.Group controlId="snippetCreateDescription">
+            <Form.Label>Snippet Description</Form.Label>
+            <Form.Control
+              type="text"
+              name="description"
+              placeholder="Description..."
+              value={createSnippetForm.description}
+              onChange={handleInputChange}
+            />
+          </Form.Group>
+        </Row>
+        <Row className="mt-3">
+          <Form.Group controlId="snippetCreateCode">
+            <Form.Label>Snippet Code</Form.Label>
+            <Form.Control
+              as={"textarea"}
+              rows={4}
+              name="code"
+              placeholder="Code..."
+              value={createSnippetForm.code}
+              onChange={handleInputChange}
+            />
+          </Form.Group>
+        </Row>
+        <Row className="mt-3">
+          <Button variant="primary" type="submit">
+            Create
+          </Button>
+          <Button variant="secondary" onClick={handleInputReset}>
+            Reset
+          </Button>
+        </Row>
       </Form>
     </Container>
   );

@@ -44,7 +44,7 @@ function SnippetsPage() {
   );
   return (
     <>
-      <h1>Snippets Page</h1>
+      <h1>Snippets Library</h1>
       <Container fluid>
         <SnippetsHeader displayDispatch={displayDispatch} />
       </Container>

@@ -119,7 +119,7 @@ function SnippetDetailsEdit() {
       setNotifActive(true);
     }
   };
-  console.log("Updated data: ", updatedData);
+
   return (
     <>
       <Modal show={true} onHide={handleClose}>
@@ -170,7 +170,8 @@ function SnippetDetailsEdit() {
             <Form.Group controlId="snippetUpdateCode">
               <Form.Label>Snippet Code</Form.Label>
               <Form.Control
-                type="text"
+                as={"textarea"}
+                rows={3}
                 name="code"
                 placeholder="Code..."
                 value={updatedData.code}

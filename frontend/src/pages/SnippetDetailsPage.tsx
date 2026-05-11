@@ -17,12 +17,10 @@ import { Button, Container, Row } from "react-bootstrap";
 import { Link, Outlet, useNavigate, useParams } from "react-router-dom";
 
 function OwnerButtons({
-  title,
   snippet,
   setSnippets,
   setSnippetsLoading,
 }: {
-  title: string;
   snippet: Snippet;
   setSnippets: React.Dispatch<React.SetStateAction<Snippet[]>>;
   setSnippetsLoading: React.Dispatch<React.SetStateAction<boolean>>;
@@ -37,6 +35,9 @@ function OwnerButtons({
   const navigate = useNavigate();
   const handleUpdatedClose = () => {
     navigate("/snippets");
+  };
+  const handleEditPopup = () => {
+    navigate(`/snippet/${snippet.title}/edit`);
   };
   const handleDelete = async () => {
     setSnippetsLoading(true);
@@ -60,8 +61,8 @@ function OwnerButtons({
   };
   return (
     <Row>
-      <Button variant="warning">
-        <Link to={`/snippet/${title}/edit`}>Edit</Link>
+      <Button variant="warning" onClick={handleEditPopup}>
+        Edit
       </Button>
       <Button variant="danger" onClick={handleDelete}>
         Delete
@@ -113,7 +114,7 @@ function SnippetDetailsPage() {
       </h1>
       <h2>{snippet.language}</h2>
       <h3>{snippet.description}</h3>
-      <code>{snippet.code}</code>
+      <pre>{snippet.code}</pre>
       <h4>Created: {new Date(snippet.creation_date).toLocaleString()}</h4>
       <h4>
         Last Updated: {new Date(snippet.last_updated_date).toLocaleString()}
@@ -122,7 +123,6 @@ function SnippetDetailsPage() {
         snippet.owner.username.toLowerCase() ===
           currentUser.username.toLowerCase() && (
           <OwnerButtons
-            title={snippet.title}
             snippet={snippet}
             setSnippets={setSnippets}
             setSnippetsLoading={setSnippetsLoading}

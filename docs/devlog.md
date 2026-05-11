@@ -9,6 +9,14 @@ Log of what I've done for this project
 3. Errors when updating snippet title
 4. Tons of stuff is copy pasted, especially with all context functions, navigate, and buttons
 
+## May 10, 2026
+
+More layout work
+
+Even though it looks ugly, I am satisfied enough to deploy it
+
+Will look into styling it later and also adding more features
+
 ## May 9, 2026
 
 More notifications in areas that should be trigger notifications

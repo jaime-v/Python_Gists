@@ -10,60 +10,69 @@ An in-depth paragraph about your project and overview of use.
 
 ### Dependencies
 
-* Docker
-* Python 3.14
-* FastAPI
-* Node v25.7.0
-* NPM 11.10.1
+- Python 3.14
+- Node v25.7.0
+- NPM 11.10.1
+- PostgreSQL 17
+
+- Everything in backend/requirements.txt and frontend/package.json
 
 ### Installing
 
-* How/where to download your program
-* Any modifications needed to be made to files/folders
+- Clone the repo
 
 ### Executing program
 
-* How to run the program
-* Step-by-step bullets
+For Backend:
+
+1. Create and activate virtual environment in backend
+2. Install dependencies
+3. Run FastAPI application
+
 ```
-code blocks for commands
+cd backend
+pip install -r requirements.txt
+fastapi dev app/main.py
+```
+
+For Frontend:
+
+1. Install dependencies
+2. Run dev server
+
+```
+cd frontend
+npm install
+npm run dev
 ```
 
 ## Help
 
-Any advise for common problems or issues.
-```
-command to run if program contains helper info
-```
+- Make sure to run programs in correct folders
 
 ## Authors
 
-Contributors names and contact info
-ex. Dominique Pizzie  
-ex. [@DomPizzie](https://twitter.com/dompizzie)
+Me [@jaime-v](https://github.com/jaime-v)
 
 ## Version History
 
-* 0.2
-    * Various bug fixes and optimizations
-    * See [commit change]() or See [release history]()
-* 0.1
-    * Initial Release
-
 ## License
-
-This project is licensed under the [NAME HERE] License - see the LICENSE.md file for details
 
 ## Acknowledgments
 
-Inspiration, code snippets, etc.
-* [awesome-readme](https://github.com/matiassingers/awesome-readme)
-* [PurpleBooth](https://gist.github.com/PurpleBooth/109311bb0361f32d87a2)
-* [dbader](https://github.com/dbader/readme-template)
-* [zenorocha](https://gist.github.com/zenorocha/4526327)
-* [fvcproductions](https://gist.github.com/fvcproductions/1bfc2d4aecb01a834b46)
+- Resources I referred to while I was building this project
 
----
+- [Corey Schafer FastAPI Tutorial](https://www.youtube.com/playlist?list=PL-osiE80TeTsak-c-QsVeg0YYG_0TeyXI)
+- [Traversy Media FastAPI Tutorial](https://www.youtube.com/watch?v=8TMQcRcBnW8)
+- [Tech with Tim FastAPI Tutorial](https://www.youtube.com/watch?v=SR5NYCdzKkc)
+- [Devsheets.io](https://devsheets.io/sheets/fastapi)
+- [FastAPI Docs](https://fastapi.tiangolo.com/tutorial/)
+- [React Reference](https://react.dev/reference/react)
+- [React Bootstrap](https://react-bootstrap.netlify.app/)
+- [React Router](https://reactrouter.com/home)
+
 ## README Template
+
 > https://gist.github.com/DomPizzie/7a5ff55ffa9081f2de27c315f5018afc
+
 ---

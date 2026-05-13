@@ -1,10 +1,9 @@
-# Project Title
+# Code Snippets Library
 
-Python Project that is essentially a small version of GitHub Gists
 
 ## Description
 
-An in-depth paragraph about your project and overview of use.
+Python Project that is essentially a small version of GitHub Gists
 
 ## Getting Started
 
